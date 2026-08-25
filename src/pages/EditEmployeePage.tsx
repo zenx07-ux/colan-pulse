@@ -106,46 +106,46 @@ export function EditEmployeePage() {
         <FormCard index={1} title="Personal Information">
           <div className="cp-form-stack">
             <div className="cp-form-grid cp-form-grid--3">
-            <FormField label="Employee ID *" fullWidth>
+              <FormField label="Employee ID *" fullWidth>
+                <EuiFieldText
+                  compressed
+                  fullWidth
+                  value={employeeCode}
+                  placeholder="e.g. EMP-001"
+                  onChange={(event) => setEmployeeCode(event.target.value)}
+                />
+              </FormField>
+              <FormField label="Employee Name *" fullWidth>
+                <EuiFieldText
+                  compressed
+                  fullWidth
+                  value={name}
+                  placeholder="Full name"
+                  onChange={(event) => setName(event.target.value)}
+                />
+              </FormField>
+              <FormField label="Gender *" fullWidth>
+                <EuiSelect
+                  compressed
+                  fullWidth
+                  options={selectOptions(GENDERS)}
+                  value={gender}
+                  onChange={(event) => setGender(event.target.value)}
+                />
+              </FormField>
+            </div>
+            <FormField
+              label="Email"
+              helpText="email@org.com (defaults from Employee ID if blank)"
+            >
               <EuiFieldText
                 compressed
                 fullWidth
-                value={employeeCode}
-                placeholder="e.g. EMP-001"
-                onChange={(event) => setEmployeeCode(event.target.value)}
+                value={email}
+                placeholder="email@org.com (defaults from Employee ID if blank)"
+                onChange={(event) => setEmail(event.target.value)}
               />
             </FormField>
-            <FormField label="Employee Name *" fullWidth>
-              <EuiFieldText
-                compressed
-                fullWidth
-                value={name}
-                placeholder="Full name"
-                onChange={(event) => setName(event.target.value)}
-              />
-            </FormField>
-            <FormField label="Gender *" fullWidth>
-              <EuiSelect
-                compressed
-                fullWidth
-                options={selectOptions(GENDERS)}
-                value={gender}
-                onChange={(event) => setGender(event.target.value)}
-              />
-            </FormField>
-          </div>
-          <FormField
-            label="Email"
-            helpText="email@org.com (defaults from Employee ID if blank)"
-          >
-            <EuiFieldText
-              compressed
-              fullWidth
-              value={email}
-              placeholder="email@org.com (defaults from Employee ID if blank)"
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </FormField>
           </div>
         </FormCard>
 

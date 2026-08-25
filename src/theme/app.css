@@ -1527,6 +1527,7 @@ body,
   align-items: center;
   gap: 8px 14px;
   margin-top: 10px;
+}
 
 .cp-incident-meta__item {
   display: inline-flex;
@@ -1699,9 +1700,14 @@ body,
   min-width: 0;
 }
 
+.cp-form-grid > .euiFormRow + .euiFormRow,
+.cp-form-stack > .euiFormRow + .euiFormRow {
+  margin-block-start: 0;
+}
+
 .cp-field {
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .cp-field > .euiFormRow__labelWrapper {
@@ -1709,7 +1715,7 @@ body,
 }
 
 .cp-field .euiFormRow__text {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .cp-field--narrow {
