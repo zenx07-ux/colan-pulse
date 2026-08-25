@@ -1,0 +1,83 @@
+export type PresenceStatus = 'active' | 'idle' | 'offline'
+export type WorkMode = 'Office' | 'Hybrid' | 'Remote'
+export type ColorMode = 'light' | 'dark'
+export type TimeRange = 'Today' | '7 days' | '30 days' | 'QTD'
+
+export interface DepartmentStat {
+  name: string
+  people: number
+  score: number
+  idle: number
+}
+
+export interface Employee {
+  id: string
+  name: string
+  role: string
+  department: string
+  status: PresenceStatus
+  idleMinutes: number
+  score: number
+  email: string
+  location: string
+  workMode: WorkMode
+  currentScreen: string | null
+  currentApp: string | null
+  aiUsage: number | null
+}
+
+export interface AppAlert {
+  id: string
+  title: string
+  detail: string
+  time: string
+  severity: 'danger' | 'warning' | 'default'
+}
+
+export type IncidentSeverity = 'critical' | 'high' | 'medium' | 'low'
+
+export interface Incident {
+  id: string
+  title: string
+  detectionType: string
+  employee: string
+  manager: string
+  techLead: string
+  device: string
+  severity: IncidentSeverity
+  read: boolean
+  occurredAt: string
+  warningCount: number
+}
+
+export type EventStatus = 'scheduled' | 'cancelled' | 'completed'
+
+export interface CalendarEvent {
+  id: string
+  name: string
+  type: string
+  classification: string
+  repeat: string
+  date: string
+  startTime: string
+  endTime: string
+  assignTo: string
+  notes: string
+  scope: string
+  createdBy: string
+  status: EventStatus
+}
+
+export interface AgentVersionShare {
+  version: string
+  count: number
+}
+
+export interface AgentErrorGroup {
+  id: string
+  name: string
+  category: string
+  count: number
+  detail: string
+  lastHost: string
+}

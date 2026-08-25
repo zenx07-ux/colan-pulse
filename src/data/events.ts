@@ -1,0 +1,76 @@
+import type { CalendarEvent } from '../types'
+
+export const calendarEvents: CalendarEvent[] = [
+  {
+    id: 'evt-1',
+    name: 'Independence Day Celebration',
+    type: 'Office Event',
+    classification: 'Productive',
+    repeat: "Doesn't repeat",
+    date: '2026-08-14',
+    startTime: '16:45',
+    endTime: '18:45',
+    assignTo: 'All applicable employees (my own scope)',
+    notes: '',
+    scope: 'All applicable employees',
+    createdBy: 'Colan Admin',
+    status: 'scheduled',
+  },
+  {
+    id: 'evt-2',
+    name: 'Sprint 24 demo',
+    type: 'Meeting',
+    classification: 'Productive',
+    repeat: 'Weekly',
+    date: '2026-08-26',
+    startTime: '11:00',
+    endTime: '12:00',
+    assignTo: 'Engineering',
+    notes: 'Walk through ColanPulse EUI dashboard.',
+    scope: 'Engineering',
+    createdBy: 'Meera Nair',
+    status: 'scheduled',
+  },
+  {
+    id: 'evt-3',
+    name: 'Q3 all-hands',
+    type: 'Office Event',
+    classification: 'Neutral',
+    repeat: "Doesn't repeat",
+    date: '2026-08-28',
+    startTime: '10:00',
+    endTime: '11:30',
+    assignTo: 'All applicable employees (my own scope)',
+    notes: 'Rescheduled due to client workshop.',
+    scope: 'Organization',
+    createdBy: 'Colan Admin',
+    status: 'cancelled',
+  },
+  {
+    id: 'evt-4',
+    name: 'Agent health workshop',
+    type: 'Training',
+    classification: 'Productive',
+    repeat: "Doesn't repeat",
+    date: '2026-09-02',
+    startTime: '14:00',
+    endTime: '16:00',
+    assignTo: 'DevOps',
+    notes: 'Desktop agent diagnostics and heartbeat recovery.',
+    scope: 'DevOps',
+    createdBy: 'Sathish Kannan',
+    status: 'scheduled',
+  },
+]
+
+export const EVENT_TYPES = ['Office Event', 'Holiday', 'Training', 'Meeting']
+export const EVENT_CLASSIFICATIONS = ['Productive', 'Non-productive', 'Neutral']
+export const EVENT_REPEATS = ["Doesn't repeat", 'Daily', 'Weekly', 'Monthly', 'Yearly']
+export const EVENT_ASSIGN = [
+  'All applicable employees (my own scope)',
+  'Engineering',
+  'UI/UX',
+  'Quality Assurance',
+  'DevOps',
+  'Support',
+]
