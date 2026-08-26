@@ -15,6 +15,8 @@ export interface Employee {
   name: string
   role: string
   department: string
+  manager: string
+  teamLead: string
   status: PresenceStatus
   idleMinutes: number
   score: number

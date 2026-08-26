@@ -1,15 +1,29 @@
+import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { EuiButtonEmpty } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
-import { PageHeading } from '../components/PageHeading'
+import { EmployeeFlyout } from '../components/EmployeeFlyout'
+import { FilterPopover } from '../components/FilterPopover'
 import { PersonCell } from '../components/PersonCell'
-import { StatusBadge } from '../components/StatusBadge'
+import { departments } from '../data/departments'
 import { employees } from '../data/employees'
 import { formatIdle } from '../utils/format'
 import type { Employee } from '../types'
 
+const IDLE_THRESHOLD_MINUTES = 15
+
 export function NeedsAttentionPage() {
-  const items = employees.filter(
-    (employee) => employee.status !== 'active' || employee.idleMinutes >= 20,
-  )
+  const navigate = useNavigate()
+  const [department, setDepartment] = useState('')
+  const [selected, setSelected] = useState<Employee | null>(null)
+
+  const items = useMemo(() => {
+    return employees.filter((employee) => {
+      if (employee.idleMinutes < IDLE_THRESHOLD_MINUTES) return false
+      if (department && employee.department !== department) return false
+      return true
+    })
+  }, [department])
 
   const columns: Array<DataTableColumn<Employee>> = [
     {
@@ -19,69 +33,72 @@ export function NeedsAttentionPage() {
       render: (employee, index) => <PersonCell name={employee.name} index={index} />,
     },
     {
-      id: 'id',
-      label: 'ID',
-      sortValue: (employee) => employee.id,
-      render: (employee) => <span className="cp-mono">{employee.id}</span>,
-    },
-    {
-      id: 'status',
-      label: 'Status',
-      sortValue: (employee) => employee.status,
-      render: (employee) => <StatusBadge status={employee.status} />,
+      id: 'role',
+      label: 'Designation',
+      sortValue: (employee) => employee.role,
+      render: (employee) => employee.role || '—',
     },
     {
       id: 'idleMinutes',
-      label: 'Idle time',
+      label: 'Idle time today',
       align: 'right',
       sortValue: (employee) => employee.idleMinutes,
       render: (employee) => (
         <span className="cp-mono">{formatIdle(employee.idleMinutes)}</span>
       ),
     },
-    {
-      id: 'reason',
-      label: 'Reason',
-      sortable: false,
-      render: (employee) => (
-        <span
-          className={`cp-status ${
-            employee.status === 'offline' ? 'cp-status--offline' : 'cp-status--idle'
-          }`}
-        >
-          <span className="cp-status__dot" />
-          {employee.status === 'offline' ? 'Agent offline' : 'High idle time'}
-        </span>
-      ),
-    },
   ]
 
   return (
-    <>
-      <PageHeading
-        title="Needs Attention"
-        description="Offline agents and idle-time thresholds that need a follow-up."
-      />
-      <div className="cp-callout" role="status" style={{ marginTop: 16 }}>
-        <div>
-          <div className="cp-callout__title">
-            {items.length} employees currently need attention
-          </div>
-          <div className="cp-callout__body">
-            Offline presence is treated as an agent-health issue. Idle time over 15
-            minutes during work hours is flagged separately.
+    <section>
+      <div className="cp-incident-head">
+        <div className="cp-page-lead">
+          <h1 className="cp-activity-title">Needs Attention</h1>
+          <div className="cp-card-sub">
+            Employees behind today's Attention Required counts on the Dashboard Overview.
           </div>
         </div>
+        <div className="cp-page-controls">
+          <FilterPopover
+            label="Department"
+            placeholder="All departments"
+            options={departments.map((item) => item.name)}
+            value={department}
+            onChange={setDepartment}
+            fullWidth
+          />
+          <EuiButtonEmpty
+            size="s"
+            iconType="arrowLeft"
+            onClick={() => navigate('/')}
+          >
+            Back to Dashboard
+          </EuiButtonEmpty>
+        </div>
       </div>
-      <section className="cp-card" style={{ marginTop: 16 }}>
+
+      <section className="cp-card">
+        <div className="cp-card-head">
+          <div className="cp-title-with-dot">
+            <span className="cp-status__dot" style={{ background: 'var(--cp-danger)' }} />
+            <div className="cp-card-title">Idle Above Threshold</div>
+          </div>
+          <span className="cp-count-pill">{items.length}</span>
+        </div>
         <DataTable
           items={items}
           columns={columns}
           getRowId={(employee) => employee.id}
-          pageSize={6}
+          pageSize={10}
           defaultSort={{ id: 'idleMinutes', direction: 'desc' }}
+          onRowClick={(employee) => setSelected(employee)}
+          empty="No employees are above the idle threshold for this department."
         />
       </section>
-    </>
+
+      {selected ? (
+        <EmployeeFlyout employee={selected} onClose={() => setSelected(null)} />
+      ) : null}
+    </section>
   )
 }

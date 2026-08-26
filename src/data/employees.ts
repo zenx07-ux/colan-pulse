@@ -1,6 +1,22 @@
 import type { Employee } from '../types'
 
-export const employees: Employee[] = [
+const MANAGER_BY_DEPT: Record<string, string> = {
+  'UI/UX': 'Vishnu K',
+  Engineering: 'Vishnu K',
+  'Quality Assurance': 'Meera Nair',
+  DevOps: 'Vishnu K',
+  Support: 'Vishnu K',
+}
+
+const TEAM_LEAD_BY_DEPT: Record<string, string> = {
+  'UI/UX': 'Karthik Raja',
+  Engineering: 'Meera Nair',
+  'Quality Assurance': 'Joseph Mathew',
+  DevOps: 'Sathish Kannan',
+  Support: 'Deepa Krishnan',
+}
+
+const employeeRecords: Array<Omit<Employee, 'manager' | 'teamLead'>> = [
   {
     id: 'CIPL1701',
     name: 'Aravind Kumar',
@@ -227,3 +243,12 @@ export const employees: Employee[] = [
     aiUsage: 15.8,
   },
 ]
+
+export const employees: Employee[] = employeeRecords.map((employee) => {
+  const teamLead = TEAM_LEAD_BY_DEPT[employee.department] ?? ''
+  return {
+    ...employee,
+    manager: MANAGER_BY_DEPT[employee.department] ?? 'Vishnu K',
+    teamLead: teamLead && teamLead !== employee.name ? teamLead : '',
+  }
+})
