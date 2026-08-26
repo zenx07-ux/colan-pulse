@@ -11,6 +11,7 @@ import moment from 'moment'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FilterPopover } from '../components/FilterPopover'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import {
   aiAdoptionStats,
   aiEmployeeUsage,
@@ -62,6 +63,7 @@ export function AiAdoptionPage() {
     {
       id: 'application',
       label: 'Application / Website',
+      width: '28%',
       sortValue: (item) => item.application,
       render: (item) => (
         <span style={{ color: 'var(--cp-heading)', fontWeight: 600 }}>
@@ -73,19 +75,21 @@ export function AiAdoptionPage() {
       id: 'usageHours',
       label: 'Usage Time',
       align: 'right',
+      width: '14%',
       sortValue: (item) => item.usageHours,
       render: (item) => <span>{item.usageHours.toFixed(1)}h</span>,
     },
     {
       id: 'usagePct',
       label: '% of AI Usage',
+      width: '42%',
       sortValue: (item) => item.usagePct,
       render: (item) => (
-        <div className="cp-ai-meter cp-ai-meter--bar">
+        <div className="cp-ai-meter">
           <div className="cp-ai-meter__track">
-            <EuiProgress value={item.usagePct} max={100} size="m" color="primary" />
-            <span className="cp-ai-meter__overlay">{item.usagePct.toFixed(1)}%</span>
+            <EuiProgress value={item.usagePct} max={100} size="s" color="primary" />
           </div>
+          <span className="cp-ai-meter__value">{item.usagePct.toFixed(1)}%</span>
         </div>
       ),
     },
@@ -93,6 +97,7 @@ export function AiAdoptionPage() {
       id: 'employeesUsing',
       label: 'Employees Using',
       align: 'right',
+      width: '16%',
       sortValue: (item) => item.employeesUsing,
       render: (item) => <span>{item.employeesUsing}</span>,
     },
@@ -152,36 +157,29 @@ export function AiAdoptionPage() {
   ]
 
   return (
-    <section className="cp-ai-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title cp-ai-page__title">
-            <EuiIcon type="compute" size="m" color="primary" />
-            AI Adoption
-          </h1>
-          <div className="cp-card-sub">
-            Detailed AI tool usage — which application, how much time, and productivity alongside
-            it.
-          </div>
-        </div>
-      </div>
+    <section className="cp-page cp-ai-page">
+      <PageHeading
+        title="AI Adoption"
+        description="Detailed AI tool usage — which application, how much time, and productivity alongside it."
+      />
 
       <section className="cp-card cp-ai-panel">
         <EuiForm css={{ margin: 0 }}>
-          <div className="cp-ai-search">
-            <EuiFieldSearch
-              compressed
-              fullWidth
-              incremental
-              isClearable
-              placeholder="Search by employee name..."
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              aria-label="Search AI adoption"
-            />
-          </div>
+          <div className="cp-page-filters">
+            <div className="cp-ai-search">
+              <EuiFieldSearch
+                compressed
+                fullWidth
+                incremental
+                isClearable
+                placeholder="Search by employee name..."
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                aria-label="Search AI adoption"
+              />
+            </div>
 
-          <div className="cp-activity-filters cp-ai-filters">
+            <div className="cp-activity-filters cp-ai-filters">
             <FilterPopover
               label="Manager"
               placeholder="All Managers"
@@ -246,6 +244,7 @@ export function AiAdoptionPage() {
                 dateFormat="DD-MM-YYYY"
               />
             </FormField>
+          </div>
           </div>
         </EuiForm>
 

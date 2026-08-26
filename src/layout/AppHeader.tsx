@@ -15,8 +15,6 @@ const PAGE_TITLES: Record<string, string> = {
   '/employees': 'Employees',
   '/user-management': 'User Management',
   '/departments': 'Departments',
-  '/projects': 'Projects',
-  '/job-roles': 'Job Roles',
   '/productivity': 'Employee Productivity',
   '/ai-adoption': 'AI Adoption',
   '/categories': 'Categories',
@@ -26,6 +24,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/alerts': 'Incident Center',
   '/agent-health': 'Agent Health',
   '/system-logs': 'System Logs',
+  '/audit-trail': 'Audit Trail',
   '/settings': 'Settings',
 }
 

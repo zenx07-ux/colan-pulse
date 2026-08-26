@@ -9,6 +9,7 @@ import {
 } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import {
   DEPARTMENT_FUNCTIONS,
   departmentRecords as seedDepartments,
@@ -122,10 +123,11 @@ export function DepartmentsPage() {
   }
 
   return (
-    <section>
-      <div className="cp-incident-head">
-        <h1 className="cp-activity-title">Departments</h1>
-        <div className="cp-incident-head__action">
+    <section className="cp-page">
+      <PageHeading
+        title="Departments"
+        description="Department and function catalog used across filters and reporting."
+        extra={
           <EuiButton
             size="s"
             fill
@@ -138,8 +140,8 @@ export function DepartmentsPage() {
           >
             Create Department
           </EuiButton>
-        </div>
-      </div>
+        }
+      />
 
       <section className="cp-card">
         <DataTable
@@ -234,21 +236,16 @@ function DepartmentFormView({
   }
 
   return (
-    <section className="cp-dept-form">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">
-            {isCreate ? 'Create Department' : 'Edit Department'}
-          </h1>
-          <div className="cp-card-sub">
-            Department Master — who reports to whom lives on the Employee Master screen; this is
-            just Department and its Functions.
-          </div>
-        </div>
-        <EuiButton className="cp-incident-head__action" size="s" onClick={onClose}>
-          ← Back to Departments
-        </EuiButton>
-      </div>
+    <section className="cp-page cp-dept-form">
+      <PageHeading
+        title={isCreate ? 'Create Department' : 'Edit Department'}
+        description="Department Master — who reports to whom lives on the Employee Master screen; this is just Department and its Functions."
+        extra={
+          <EuiButton size="s" onClick={onClose}>
+            ← Back to Departments
+          </EuiButton>
+        }
+      />
 
       <EuiForm className="cp-dept-form__grid" component="form" onSubmit={(event) => event.preventDefault()}>
         <section className="cp-card cp-form-card cp-dept-form__dept">

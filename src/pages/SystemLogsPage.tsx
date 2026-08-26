@@ -10,6 +10,7 @@ import {
 import type { Moment } from 'moment'
 import moment from 'moment'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { systemLogs as seedLogs } from '../data/systemLogs'
 import type { SystemLogKind } from '../types'
 
@@ -89,16 +90,11 @@ export function SystemLogsPage() {
   }
 
   return (
-    <section className="cp-logs-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">System Logs</h1>
-          <div className="cp-card-sub">
-            Technical failures (DB errors, agent crashes) — filter by employee to see if an issue is
-            affecting one person or the whole system.
-          </div>
-        </div>
-      </div>
+    <section className="cp-page cp-logs-page">
+      <PageHeading
+        title="System Logs"
+        description="Technical failures (DB errors, agent crashes) — filter by employee to see if an issue is affecting one person or the whole system."
+      />
 
       <section className="cp-card cp-event-filters">
         <EuiForm css={{ margin: 0 }}>
@@ -150,12 +146,14 @@ export function SystemLogsPage() {
                 onSearch={applyFilters}
               />
             </FormField>
-            <EuiButton size="s" fill onClick={applyFilters}>
-              Apply
-            </EuiButton>
-            <EuiButton size="s" onClick={clearFilters}>
-              Clear
-            </EuiButton>
+            <div className="cp-filter-actions">
+              <EuiButton size="s" fill onClick={applyFilters}>
+                Apply
+              </EuiButton>
+              <EuiButton size="s" onClick={clearFilters}>
+                Clear
+              </EuiButton>
+            </div>
           </div>
         </EuiForm>
       </section>

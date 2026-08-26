@@ -13,6 +13,7 @@ import type { Moment } from 'moment'
 import moment from 'moment'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { aiAssistantTools as seedTools, aiDiagnosticCaptures } from '../data/aiAssistants'
 import { employees } from '../data/employees'
 import type { AiAssistantTool, AiDiagnosticCapture, AiTestConfidence } from '../types'
@@ -125,6 +126,7 @@ export function AiAssistantDetectionPage() {
     {
       id: 'name',
       label: 'AI Tool',
+      width: '18%',
       sortValue: (item) => item.name,
       render: (item) => (
         <strong style={{ color: 'var(--cp-heading)' }}>{item.name}</strong>
@@ -133,12 +135,14 @@ export function AiAssistantDetectionPage() {
     {
       id: 'process',
       label: 'Process Names',
+      width: '22%',
       sortValue: (item) => joinNames(item.processNames),
       render: (item) => <span className="cp-mono">{joinNames(item.processNames)}</span>,
     },
     {
       id: 'exe',
       label: 'Executable Names',
+      width: '22%',
       sortValue: (item) => joinNames(item.executableNames),
       render: (item) => (
         <span className="cp-mono">{joinNames(item.executableNames) || '—'}</span>
@@ -147,6 +151,7 @@ export function AiAssistantDetectionPage() {
     {
       id: 'status',
       label: 'Status',
+      width: '12%',
       sortValue: (item) => (item.enabled ? 'Active' : 'Inactive'),
       render: (item) => (
         <span
@@ -159,6 +164,7 @@ export function AiAssistantDetectionPage() {
     {
       id: 'notes',
       label: 'Notes',
+      width: '16%',
       sortValue: (item) => item.notes,
       render: (item) => (
         <span className="cp-truncate" title={item.notes}>
@@ -170,6 +176,7 @@ export function AiAssistantDetectionPage() {
       id: 'action',
       label: 'Actions',
       align: 'center',
+      width: '88px',
       sortable: false,
       render: (item) => (
         <span className="cp-action-pair">
@@ -201,20 +208,18 @@ export function AiAssistantDetectionPage() {
   ]
 
   return (
-    <section>
-      <div className="cp-incident-head">
-        <div className="cp-detect-lead">
-          <h1 className="cp-activity-title">AI Assistant Detection</h1>
-          <div className="cp-card-sub">{PAGE_DESCRIPTION}</div>
-        </div>
-        {tab === 'rules' ? (
-          <div className="cp-incident-head__action">
+    <section className="cp-page">
+      <PageHeading
+        title="AI Assistant Detection"
+        description={PAGE_DESCRIPTION}
+        extra={
+          tab === 'rules' ? (
             <EuiButton size="s" fill color="success" iconType="plus" onClick={openCreate}>
               Add Tool
             </EuiButton>
-          </div>
-        ) : null}
-      </div>
+          ) : null
+        }
+      />
 
       <div className="cp-tabs" role="tablist">
         {TABS.map((item) => (
@@ -235,15 +240,20 @@ export function AiAssistantDetectionPage() {
         <>
           <section className="cp-card cp-detect-panel">
             <EuiSwitch
-              label="AI Detection Diagnostics"
+              label=""
+              showLabel={false}
               checked={diagnosticsOn}
               onChange={(event) => setDiagnosticsOn(event.target.checked)}
+              aria-label="AI Detection Diagnostics"
             />
-            <p className="cp-card-sub cp-detect-panel__hint">
-              {diagnosticsOn
-                ? 'On — capturing background process names for a short validation run. Turn off when finished.'
-                : 'Off — meant for short validation runs, not permanent capture.'}
-            </p>
+            <div className="cp-detect-panel__copy">
+              <div className="cp-detect-panel__title">AI Detection Diagnostics</div>
+              <p className="cp-card-sub cp-detect-panel__hint">
+                {diagnosticsOn
+                  ? 'On — capturing background process names for a short validation run. Turn off when finished.'
+                  : 'Off — meant for short validation runs, not permanent capture.'}
+              </p>
+            </div>
           </section>
 
           <section className="cp-card cp-master-table">

@@ -166,3 +166,24 @@ export interface AgentLatestError {
   version: string
   occurredAt: string
 }
+
+export type AuditAction =
+  | 'Login'
+  | 'Logout'
+  | 'PasswordChanged'
+  | 'PasswordReset'
+  | 'CategoryRuleCreated'
+  | 'RoleChanged'
+  | 'SettingsUpdated'
+  | 'ScreenshotViewed'
+
+export interface AuditEntry {
+  id: string
+  action: AuditAction
+  userId: string
+  table: string
+  ip: string
+  timestamp: string
+  after: Record<string, unknown> | null
+  device: string
+}

@@ -11,6 +11,7 @@ import moment from 'moment'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FilterPopover } from '../components/FilterPopover'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { ProductivityDetailDrawer } from '../components/ProductivityDetailDrawer'
 import { employees } from '../data/employees'
 import { formatHms, seededSeconds } from '../utils/format'
@@ -248,14 +249,14 @@ export function ProductivityPage() {
   ]
 
   return (
-    <>
-      <section className="cp-card cp-activity">
-        <div className="cp-activity-head">
-          <h1 className="cp-activity-title">Employee Productivity</h1>
-          <span className="cp-count-pill">{filtered.length} employees</span>
-        </div>
-
-        <EuiForm css={{ margin: 0 }}>
+    <section className="cp-page">
+      <PageHeading
+        title="Employee Productivity"
+        description="Work versus idle time for the selected date."
+        extra={<span className="cp-count-pill">{filtered.length} employees</span>}
+      />
+      <EuiForm css={{ margin: 0 }}>
+        <div className="cp-page-filters">
           <div className="cp-activity-filters cp-activity-filters--prod">
             <FilterPopover
               label="Manager"
@@ -311,21 +312,22 @@ export function ProductivityPage() {
               />
             </FormField>
           </div>
+        </div>
+      </EuiForm>
 
-          <div className="cp-activity-toolbar">
-            <EuiFieldSearch
-              compressed
-              fullWidth
-              incremental
-              isClearable
-              placeholder="Search by name, ID, email, or designation..."
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              aria-label="Search employees"
-            />
-          </div>
-        </EuiForm>
-
+      <section className="cp-card cp-activity">
+        <div className="cp-activity-toolbar">
+          <EuiFieldSearch
+            compressed
+            fullWidth
+            incremental
+            isClearable
+            placeholder="Search by name, ID, email, or designation..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            aria-label="Search employees"
+          />
+        </div>
         <DataTable
           items={filtered}
           columns={columns}
@@ -340,6 +342,6 @@ export function ProductivityPage() {
       {selected ? (
         <ProductivityDetailDrawer employee={selected} onClose={() => setSelected(null)} />
       ) : null}
-    </>
+    </section>
   )
 }

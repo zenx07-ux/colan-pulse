@@ -5,6 +5,7 @@ import { AgentHealthPage } from './pages/AgentHealthPage'
 import { AiAssistantDetectionPage } from './pages/AiAssistantDetectionPage'
 import { AiAdoptionPage } from './pages/AiAdoptionPage'
 import { AlertsPage } from './pages/AlertsPage'
+import { AuditTrailPage } from './pages/AuditTrailPage'
 import { CategoriesPage } from './pages/CategoriesPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { DepartmentsPage } from './pages/DepartmentsPage'
@@ -18,10 +19,6 @@ import { SystemLogsPage } from './pages/SystemLogsPage'
 import { ProductivityPage } from './pages/ProductivityPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { UserManagementPage } from './pages/UserManagementPage'
-import {
-  JobRolesPage,
-  ProjectsPage,
-} from './pages/WorkspacePages'
 
 export default function App() {
   return (
@@ -34,8 +31,6 @@ export default function App() {
         <Route path="/user-management" element={<UserManagementPage />} />
         <Route path="/user-management/:employeeId" element={<EditEmployeePage />} />
         <Route path="/departments" element={<DepartmentsPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/job-roles" element={<JobRolesPage />} />
         <Route path="/productivity" element={<ProductivityPage />} />
         <Route path="/ai-adoption" element={<AiAdoptionPage />} />
         <Route path="/categories" element={<CategoriesPage />} />
@@ -45,6 +40,7 @@ export default function App() {
         <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/agent-health" element={<AgentHealthPage />} />
         <Route path="/system-logs" element={<SystemLogsPage />} />
+        <Route path="/audit-trail" element={<AuditTrailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

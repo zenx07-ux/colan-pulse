@@ -4,6 +4,7 @@ import { EuiButtonEmpty } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { EmployeeFlyout } from '../components/EmployeeFlyout'
 import { FilterPopover } from '../components/FilterPopover'
+import { PageHeading } from '../components/PageHeading'
 import { PersonCell } from '../components/PersonCell'
 import { departments } from '../data/departments'
 import { employees } from '../data/employees'
@@ -51,32 +52,30 @@ export function NeedsAttentionPage() {
   ]
 
   return (
-    <section>
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">Needs Attention</h1>
-          <div className="cp-card-sub">
-            Employees currently idle above the 15-minute threshold.
+    <section className="cp-page">
+      <PageHeading
+        title="Needs Attention"
+        description="Employees currently idle above the 15-minute threshold."
+        extra={
+          <div className="cp-page-controls">
+            <FilterPopover
+              label="Department"
+              placeholder="All departments"
+              options={departments.map((item) => item.name)}
+              value={department}
+              onChange={setDepartment}
+              fullWidth
+            />
+            <EuiButtonEmpty
+              size="s"
+              iconType="arrowLeft"
+              onClick={() => navigate('/')}
+            >
+              Back to Dashboard
+            </EuiButtonEmpty>
           </div>
-        </div>
-        <div className="cp-page-controls">
-          <FilterPopover
-            label="Department"
-            placeholder="All departments"
-            options={departments.map((item) => item.name)}
-            value={department}
-            onChange={setDepartment}
-            fullWidth
-          />
-          <EuiButtonEmpty
-            size="s"
-            iconType="arrowLeft"
-            onClick={() => navigate('/')}
-          >
-            Back to Dashboard
-          </EuiButtonEmpty>
-        </div>
-      </div>
+        }
+      />
 
       <section className="cp-card">
         <div className="cp-card-head">

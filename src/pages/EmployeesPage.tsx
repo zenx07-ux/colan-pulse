@@ -11,6 +11,7 @@ import {
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { EmployeeFlyout } from '../components/EmployeeFlyout'
 import { FilterPopover } from '../components/FilterPopover'
+import { PageHeading } from '../components/PageHeading'
 import { employees, jobFunction } from '../data/employees'
 import { formatHms, seededSeconds } from '../utils/format'
 import type { Employee } from '../types'
@@ -182,14 +183,16 @@ export function EmployeesPage() {
   ]
 
   return (
-    <>
-      <section className="cp-card cp-activity">
-        <div className="cp-activity-head">
-          <h1 className="cp-activity-title">Employees Activity</h1>
+    <section className="cp-page">
+      <PageHeading
+        title="Employees Activity"
+        description="Live presence and current application by employee."
+        extra={
           <span className="cp-count-pill">Total: {filtered.length} employees</span>
-        </div>
-        <EuiForm css={{ margin: 0 }}>
-        <div className="cp-activity-filters">
+        }
+      />
+      <EuiForm css={{ margin: 0 }}>
+        <div className="cp-incident-filters">
           <FilterPopover
             label="Manager"
             placeholder="All Managers"
@@ -233,6 +236,8 @@ export function EmployeesPage() {
             onChange={setWorkMode}
           />
         </div>
+      </EuiForm>
+      <section className="cp-card cp-activity">
         <div className="cp-activity-toolbar">
           <EuiFlexGroup alignItems="center" gutterSize="m" responsive={false} wrap>
             <EuiFlexItem>
@@ -264,7 +269,6 @@ export function EmployeesPage() {
             </EuiFlexItem>
           </EuiFlexGroup>
         </div>
-        </EuiForm>
         <DataTable
           items={filtered}
           columns={columns}
@@ -277,6 +281,6 @@ export function EmployeesPage() {
       {selected ? (
         <EmployeeFlyout employee={selected} onClose={() => setSelected(null)} />
       ) : null}
-    </>
+    </section>
   )
 }

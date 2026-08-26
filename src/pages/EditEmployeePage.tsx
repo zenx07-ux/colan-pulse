@@ -11,6 +11,7 @@ import {
   EuiSelect,
 } from '@elastic/eui'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import {
   DEPARTMENT_FUNCTIONS,
   departmentRecords,
@@ -190,23 +191,16 @@ export function EditEmployeePage() {
   }
 
   return (
-    <section className="cp-edit-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">{isNew ? 'Create Employee' : 'Edit Employee'}</h1>
-          <div className="cp-card-sub">
-            Employee Master — one record for every person, regardless of designation.
-          </div>
-        </div>
-        <EuiButtonEmpty
-          className="cp-incident-head__action"
-          size="s"
-          iconType="arrowLeft"
-          onClick={goBack}
-        >
-          Back to Employee Master
-        </EuiButtonEmpty>
-      </div>
+    <section className="cp-page cp-edit-page">
+      <PageHeading
+        title={isNew ? 'Create Employee' : 'Edit Employee'}
+        description="Employee Master — one record for every person, regardless of designation."
+        extra={
+          <EuiButtonEmpty size="s" iconType="arrowLeft" onClick={goBack}>
+            Back to Employee Master
+          </EuiButtonEmpty>
+        }
+      />
 
       <EuiForm component="form" onSubmit={(event) => event.preventDefault()}>
         <FormCard title="Employee details">
