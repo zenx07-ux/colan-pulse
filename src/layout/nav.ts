@@ -16,9 +16,10 @@ export const NAV_ITEMS: NavLeaf[] = [
   { id: 'projects', name: 'Projects', path: '/projects', icon: 'folderOpen' },
   { id: 'roles', name: 'Job Roles', path: '/job-roles', icon: 'user' },
   { id: 'productivity', name: 'Employee Productivity', path: '/productivity', icon: 'visGauge' },
+  { id: 'ai-adoption', name: 'AI Adoption', path: '/ai-adoption', icon: 'machineLearningApp' },
   { id: 'categories', name: 'Categories', path: '/categories', icon: 'tableOfContents' },
   { id: 'events', name: 'Events', path: '/events', icon: 'calendar' },
-  { id: 'reports', name: 'Reports', path: '/reports', icon: 'reportingApp' },
+  { id: 'reports', name: 'Report Config', path: '/reports', icon: 'reportingApp' },
   { id: 'alerts', name: 'Alerts', path: '/alerts', icon: 'bell' },
   { id: 'agent', name: 'Agent Health', path: '/agent-health', icon: 'monitoringApp' },
 ]

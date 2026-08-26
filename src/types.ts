@@ -59,6 +59,7 @@ export interface Incident {
   read: boolean
   occurredAt: string
   warningCount: number
+  usagePct: number
 }
 
 export type EventStatus = 'scheduled' | 'cancelled' | 'completed'
@@ -91,4 +92,18 @@ export interface AgentErrorGroup {
   count: number
   detail: string
   lastHost: string
+}
+
+export type AgentErrorSource = 'agent' | 'api'
+
+export interface AgentLatestError {
+  id: string
+  name: string
+  source: AgentErrorSource
+  employee: string
+  device: string
+  detail: string
+  host: string
+  version: string
+  occurredAt: string
 }
