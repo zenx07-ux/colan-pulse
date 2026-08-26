@@ -9,6 +9,7 @@ import { utcClock } from '../utils/format'
 
 const PAGE_TITLES: Record<string, string> = {
   '/': 'Dashboard',
+  '/needs-attention': 'Needs Attention',
   '/employees': 'Employees',
   '/user-management': 'User Management',
   '/departments': 'Departments',

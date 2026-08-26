@@ -522,6 +522,17 @@ body,
   flex: none;
 }
 
+.cp-incident-head .cp-page-controls {
+  align-items: flex-end;
+  flex: none;
+}
+
+.cp-title-with-dot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .cp-card-head {
   display: flex;
   align-items: center;
@@ -1175,7 +1186,7 @@ body,
 
 .cp-activity-filters {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
   padding: 8px 16px 0;
   align-items: end;
@@ -1324,6 +1335,16 @@ body,
 
 .cp-cell-stack .cp-emp-id {
   margin-top: 0;
+}
+
+.cp-emp-reporting {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--cp-text-sub);
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .cp-activity .cp-table th {
@@ -1699,9 +1720,14 @@ body,
   min-width: 0;
 }
 
+.cp-form-grid > .euiFormRow + .euiFormRow,
+.cp-form-stack > .euiFormRow + .euiFormRow {
+  margin-block-start: 0;
+}
+
 .cp-field {
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .cp-field > .euiFormRow__labelWrapper {
@@ -1709,7 +1735,7 @@ body,
 }
 
 .cp-field .euiFormRow__text {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .cp-field--narrow {
@@ -1844,6 +1870,10 @@ body,
 
   .cp-health-charts {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cp-activity-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

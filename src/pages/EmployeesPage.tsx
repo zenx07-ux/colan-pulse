@@ -33,32 +33,45 @@ function unique(values: string[]) {
 
 export function EmployeesPage() {
   const [query, setQuery] = useState('')
+  const [manager, setManager] = useState('')
   const [department, setDepartment] = useState('')
   const [fn, setFn] = useState('')
+  const [teamLead, setTeamLead] = useState('')
   const [location, setLocation] = useState('')
   const [workMode, setWorkMode] = useState('')
   const [status, setStatus] = useState<ConnectionFilter>('all')
   const [selected, setSelected] = useState<Employee | null>(null)
 
+  const managers = unique(employees.map((employee) => employee.manager).filter(Boolean))
   const functions = unique(employees.map(jobFunction))
+  const teamLeads = unique(employees.map((employee) => employee.teamLead).filter(Boolean))
   const locations = unique(employees.map((employee) => employee.location))
   const workModes = unique(employees.map((employee) => employee.workMode))
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     return employees.filter((employee) => {
+      if (manager && employee.manager !== manager) return false
       if (department && employee.department !== department) return false
       if (fn && jobFunction(employee) !== fn) return false
+      if (teamLead && employee.teamLead !== teamLead) return false
       if (location && employee.location !== location) return false
       if (workMode && employee.workMode !== workMode) return false
       if (status === 'online' && !isOnline(employee)) return false
       if (status === 'offline' && isOnline(employee)) return false
       if (!normalized) return true
-      return [employee.name, employee.id, employee.role, employee.currentApp]
+      return [
+        employee.name,
+        employee.id,
+        employee.role,
+        employee.currentApp,
+        employee.manager,
+        employee.teamLead,
+      ]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(normalized))
     })
-  }, [department, fn, location, query, status, workMode])
+  }, [department, fn, location, manager, query, status, teamLead, workMode])
 
   const columns: Array<DataTableColumn<Employee>> = [
     {
@@ -69,6 +82,10 @@ export function EmployeesPage() {
         <div className="cp-cell-stack">
           <strong style={{ color: 'var(--cp-heading)' }}>{employee.name}</strong>
           <span className="cp-emp-id">{employee.id}</span>
+          <div className="cp-emp-reporting">
+            <span>Manager {employee.manager || '—'}</span>
+            <span>TL {employee.teamLead || '—'}</span>
+          </div>
         </div>
       ),
     },
@@ -180,6 +197,13 @@ export function EmployeesPage() {
         <EuiForm css={{ margin: 0 }}>
         <div className="cp-activity-filters">
           <FilterPopover
+            label="Manager"
+            placeholder="All Managers"
+            options={managers}
+            value={manager}
+            onChange={setManager}
+          />
+          <FilterPopover
             label="Department"
             placeholder="All Departments"
             options={unique(employees.map((employee) => employee.department))}
@@ -192,6 +216,13 @@ export function EmployeesPage() {
             options={functions}
             value={fn}
             onChange={setFn}
+          />
+          <FilterPopover
+            label="Team Lead"
+            placeholder="All Team Leads"
+            options={teamLeads}
+            value={teamLead}
+            onChange={setTeamLead}
           />
           <FilterPopover
             label="Location"

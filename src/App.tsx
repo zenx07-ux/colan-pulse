@@ -6,6 +6,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { EditEmployeePage } from './pages/EditEmployeePage'
 import { EmployeesPage } from './pages/EmployeesPage'
 import { EventsPage } from './pages/EventsPage'
+import { NeedsAttentionPage } from './pages/NeedsAttentionPage'
 import { UserManagementPage } from './pages/UserManagementPage'
 import {
   CategoriesPage,
@@ -21,6 +22,7 @@ export default function App() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<DashboardPage />} />
+        <Route path="/needs-attention" element={<NeedsAttentionPage />} />
         <Route path="/employees" element={<EmployeesPage />} />
         <Route path="/user-management" element={<UserManagementPage />} />
         <Route path="/user-management/:employeeId" element={<EditEmployeePage />} />

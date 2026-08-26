@@ -16,10 +16,11 @@ export function FormField({
       css={[
         css,
         {
+          marginTop: 0,
           marginBottom: 0,
           display: fullWidth ? 'flex' : 'inline-flex',
           flexDirection: 'column',
-          rowGap: 12,
+          rowGap: 8,
           width: fullWidth ? '100%' : 'auto',
         },
       ]}

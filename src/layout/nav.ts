@@ -9,6 +9,7 @@ export interface NavLeaf {
 
 export const NAV_ITEMS: NavLeaf[] = [
   { id: 'dashboard', name: 'Dashboard', path: '/', icon: 'dashboardApp' },
+  { id: 'attention', name: 'Needs Attention', path: '/needs-attention', icon: 'warning' },
   { id: 'employees', name: 'Employees', path: '/employees', icon: 'users' },
   { id: 'users', name: 'User Management', path: '/user-management', icon: 'managementApp' },
   { id: 'departments', name: 'Departments', path: '/departments', icon: 'nested' },
