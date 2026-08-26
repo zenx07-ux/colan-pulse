@@ -1,25 +1,38 @@
-import type { CalendarEvent } from '../types'
+import type { CalendarEvent, EventCategory } from '../types'
+
+export const eventCategories: EventCategory[] = [
+  { id: 'cat-client', name: 'Client Meeting', classification: 'Productive', status: 'Active' },
+  { id: 'cat-fun', name: 'Fun Activity', classification: 'Neutral', status: 'Active' },
+  { id: 'cat-hr', name: 'HR Event', classification: 'Neutral', status: 'Active' },
+  { id: 'cat-ks', name: 'Knowledge Sharing', classification: 'Productive', status: 'Active' },
+  { id: 'cat-lunch', name: 'Lunch', classification: 'Break', status: 'Active' },
+  { id: 'cat-office', name: 'Office Event', classification: 'Neutral', status: 'Active' },
+  { id: 'cat-scrum', name: 'Scrum Meeting', classification: 'Productive', status: 'Active' },
+  { id: 'cat-training', name: 'Training', classification: 'Productive', status: 'Active' },
+  { id: 'cat-meeting', name: 'Meeting', classification: 'Productive', status: 'Active' },
+  { id: 'cat-holiday', name: 'Holiday', classification: 'Neutral', status: 'Active' },
+]
 
 export const calendarEvents: CalendarEvent[] = [
   {
     id: 'evt-1',
-    name: 'Independence Day Celebration',
-    type: 'Office Event',
+    name: 'PHP Scrum',
+    type: 'Scrum Meeting',
     classification: 'Productive',
-    repeat: "Doesn't repeat",
-    date: '2026-08-14',
-    startTime: '16:45',
-    endTime: '18:45',
-    assignTo: 'All applicable employees (my own scope)',
+    repeat: 'Daily',
+    date: '2026-08-18',
+    startTime: '10:00',
+    endTime: '10:20',
+    assignTo: 'Engineering',
     notes: '',
-    scope: 'All applicable employees',
-    createdBy: 'Colan Admin',
+    scope: 'Engineering',
+    createdBy: 'CIPL1701',
     status: 'scheduled',
   },
   {
     id: 'evt-2',
     name: 'Sprint 24 demo',
-    type: 'Meeting',
+    type: 'Knowledge Sharing',
     classification: 'Productive',
     repeat: 'Weekly',
     date: '2026-08-26',
@@ -28,7 +41,7 @@ export const calendarEvents: CalendarEvent[] = [
     assignTo: 'Engineering',
     notes: 'Walk through ColanPulse EUI dashboard.',
     scope: 'Engineering',
-    createdBy: 'Meera Nair',
+    createdBy: 'CIPL1703',
     status: 'scheduled',
   },
   {
@@ -43,7 +56,7 @@ export const calendarEvents: CalendarEvent[] = [
     assignTo: 'All applicable employees (my own scope)',
     notes: 'Rescheduled due to client workshop.',
     scope: 'Organization',
-    createdBy: 'Colan Admin',
+    createdBy: 'CIPL0000',
     status: 'cancelled',
   },
   {
@@ -58,13 +71,72 @@ export const calendarEvents: CalendarEvent[] = [
     assignTo: 'DevOps',
     notes: 'Desktop agent diagnostics and heartbeat recovery.',
     scope: 'DevOps',
-    createdBy: 'Sathish Kannan',
+    createdBy: 'CIPL1712',
+    status: 'scheduled',
+  },
+  {
+    id: 'evt-5',
+    name: 'Independence Day Celebration',
+    type: 'Office Event',
+    classification: 'Neutral',
+    repeat: "Doesn't repeat",
+    date: '2026-08-14',
+    startTime: '16:45',
+    endTime: '18:45',
+    assignTo: 'All applicable employees (my own scope)',
+    notes: '',
+    scope: 'Organization',
+    createdBy: 'CIPL0000',
+    status: 'completed',
+  },
+  {
+    id: 'evt-6',
+    name: 'Client workshop — Pulse',
+    type: 'Client Meeting',
+    classification: 'Productive',
+    repeat: "Doesn't repeat",
+    date: '2026-08-20',
+    startTime: '15:00',
+    endTime: '16:30',
+    assignTo: 'UI/UX',
+    notes: 'Review dashboard IA with the client.',
+    scope: 'UI/UX',
+    createdBy: 'CIPL1704',
+    status: 'scheduled',
+  },
+  {
+    id: 'evt-7',
+    name: 'Team lunch',
+    type: 'Lunch',
+    classification: 'Break',
+    repeat: "Doesn't repeat",
+    date: '2026-08-21',
+    startTime: '13:00',
+    endTime: '14:00',
+    assignTo: 'Quality Assurance',
+    notes: '',
+    scope: 'Quality Assurance',
+    createdBy: 'CIPL1708',
+    status: 'scheduled',
+  },
+  {
+    id: 'evt-8',
+    name: 'Friday fun hour',
+    type: 'Fun Activity',
+    classification: 'Neutral',
+    repeat: 'Weekly',
+    date: '2026-08-21',
+    startTime: '17:00',
+    endTime: '18:00',
+    assignTo: 'All applicable employees (my own scope)',
+    notes: 'Optional games and snacks.',
+    scope: 'Organization',
+    createdBy: 'CIPL0000',
     status: 'scheduled',
   },
 ]
 
-export const EVENT_TYPES = ['Office Event', 'Holiday', 'Training', 'Meeting']
-export const EVENT_CLASSIFICATIONS = ['Productive', 'Non-productive', 'Neutral']
+export const EVENT_CLASSIFICATIONS = ['Productive', 'Neutral', 'Break']
 export const EVENT_REPEATS = ["Doesn't repeat", 'Daily', 'Weekly', 'Monthly', 'Yearly']
 export const EVENT_ASSIGN = [
   'All applicable employees (my own scope)',
@@ -74,3 +146,8 @@ export const EVENT_ASSIGN = [
   'DevOps',
   'Support',
 ]
+export const EVENT_STATUS_LABELS: Record<CalendarEvent['status'], string> = {
+  scheduled: 'Scheduled',
+  cancelled: 'Cancelled',
+  completed: 'Completed',
+}

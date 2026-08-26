@@ -69,8 +69,10 @@ export function EmployeeFlyout({
             <div className="cp-drawer__title" id="employee-flyout-title">
               {employee.name}
             </div>
-            <div className="cp-emp-id">
-              {employee.id}
+            <div className="cp-emp-id">{employee.id}</div>
+            <div className="cp-emp-reporting">
+              <span>Manager {employee.manager || '—'}</span>
+              <span>TL {employee.teamLead || '—'}</span>
             </div>
           </div>
           <button type="button" className="cp-icon-btn" aria-label="Close" onClick={onClose}>

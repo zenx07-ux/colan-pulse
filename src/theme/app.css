@@ -154,6 +154,16 @@ body,
   background: var(--cp-danger);
 }
 
+.cp-status--neutral {
+  background: var(--cp-select);
+  border: 1px solid var(--cp-border-plain);
+  color: var(--cp-primary-text);
+}
+
+.cp-status--neutral .cp-status__dot {
+  background: var(--cp-primary);
+}
+
 .cp-live {
   display: inline-flex;
   align-items: center;
@@ -742,6 +752,14 @@ body,
   font-size: 13px;
 }
 
+button.cp-name {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .cp-person {
   display: flex;
   align-items: center;
@@ -960,7 +978,7 @@ body,
   top: 0;
   right: 0;
   bottom: 0;
-  width: 440px;
+  width: min(440px, 100%);
   max-width: 100%;
   background: var(--cp-plain);
   box-shadow: var(--cp-shadow-m);

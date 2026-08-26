@@ -18,10 +18,13 @@ export const NAV_ITEMS: NavLeaf[] = [
   { id: 'productivity', name: 'Employee Productivity', path: '/productivity', icon: 'visGauge' },
   { id: 'ai-adoption', name: 'AI Adoption', path: '/ai-adoption', icon: 'machineLearningApp' },
   { id: 'categories', name: 'Categories', path: '/categories', icon: 'tableOfContents' },
+  { id: 'ai-detection', name: 'AI Assistant Detection', path: '/ai-assistant-detection', icon: 'sparkles' },
   { id: 'events', name: 'Events', path: '/events', icon: 'calendar' },
   { id: 'reports', name: 'Report Config', path: '/reports', icon: 'reportingApp' },
   { id: 'alerts', name: 'Alerts', path: '/alerts', icon: 'bell' },
   { id: 'agent', name: 'Agent Health', path: '/agent-health', icon: 'monitoringApp' },
+  { id: 'logs', name: 'System Logs', path: '/system-logs', icon: 'document' },
+  { id: 'settings', name: 'Settings', path: '/settings', icon: 'gear' },
 ]
 
 export const NAV_WIDTH = 232

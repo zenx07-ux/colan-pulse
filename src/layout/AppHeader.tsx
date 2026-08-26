@@ -20,10 +20,13 @@ const PAGE_TITLES: Record<string, string> = {
   '/productivity': 'Employee Productivity',
   '/ai-adoption': 'AI Adoption',
   '/categories': 'Categories',
+  '/ai-assistant-detection': 'AI Assistant Detection',
   '/events': 'Events',
   '/reports': 'Report Configuration',
   '/alerts': 'Incident Center',
   '/agent-health': 'Agent Health',
+  '/system-logs': 'System Logs',
+  '/settings': 'Settings',
 }
 
 export function AppHeader() {

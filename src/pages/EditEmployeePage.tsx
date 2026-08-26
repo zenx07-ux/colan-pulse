@@ -3,42 +3,118 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
   EuiButton,
   EuiButtonEmpty,
-  EuiComboBox,
+  EuiCheckbox,
+  EuiFieldSearch,
   EuiFieldText,
   EuiForm,
+  EuiIcon,
   EuiSelect,
-  EuiText,
 } from '@elastic/eui'
-import type { EuiComboBoxOptionOption } from '@elastic/eui'
 import { FormField } from '../components/FormField'
-import { departments } from '../data/departments'
-import { employees } from '../data/employees'
+import {
+  DEPARTMENT_FUNCTIONS,
+  departmentRecords,
+} from '../data/departments'
+import { employees, jobFunction } from '../data/employees'
 
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say']
 const HOURS = ['4 hours', '6 hours', '8 hours', '8.5 hours', '9 hours']
 const LOCATIONS = ['Chennai', 'Bengaluru', 'Hyderabad', 'Coimbatore']
 const WORK_MODES = ['WFO', 'Hybrid', 'Remote', 'Unspecified']
 const STATUSES = ['Active', 'Inactive']
-const FUNCTION_MAP: Record<string, string[]> = {
-  'UI/UX': ['Design', 'Research', 'Visual'],
-  Engineering: ['Development', 'Architecture', 'Platform'],
-  'Quality Assurance': ['QA', 'Automation'],
-  DevOps: ['Infrastructure', 'SRE', 'Release'],
-  Support: ['Support', 'Success'],
-}
+const WORK_MODE_OPTIONS = [
+  { value: '', text: '-- Select --' },
+  { value: 'Office', text: 'WFO' },
+  { value: 'Hybrid', text: 'Hybrid' },
+  { value: 'Remote', text: 'WFH' },
+]
+const PROJECTS = ['ColanPulse EUI', 'Agent heartbeat v2', 'Support portal']
 
 const DESIGNATIONS = Array.from(new Set(employees.map((item) => item.role))).sort()
-const LEADS = employees
-  .filter((item) => /lead|manager|sre/i.test(item.role))
-  .map((item) => item.name)
-const MANAGERS = ['Vishnu K', 'Meera Nair', 'Deepa Krishnan', 'Karthik Raja']
+const DEPARTMENT_OPTIONS = unique([
+  ...departmentRecords.map((item) => item.name),
+  ...employees.map((item) => item.department),
+])
+const FUNCTION_OPTIONS = unique([
+  ...DEPARTMENT_FUNCTIONS,
+  ...departmentRecords.flatMap((item) => item.functions),
+  ...employees.map(jobFunction),
+  'Motion / Visual Design',
+  'UX Design',
+])
 
-function options(values: string[]): EuiComboBoxOptionOption[] {
-  return values.map((label) => ({ label }))
+const LEADS = unique([
+  ...employees.map((item) => item.teamLead).filter(Boolean),
+  ...employees.filter((item) => /lead|manager|sre/i.test(item.role)).map((item) => item.name),
+])
+const MANAGERS = unique([
+  ...employees.map((item) => item.manager).filter(Boolean),
+  'Vishnu K',
+  'Meera Nair',
+  'Deepa Krishnan',
+  'Karthik Raja',
+])
+
+function unique(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean))).sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: 'base' }),
+  )
+}
+
+function slug(value: string) {
+  return value.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase()
 }
 
 function selectOptions(values: string[], placeholder = '-- Select --') {
   return [{ value: '', text: placeholder }, ...values.map((value) => ({ value, text: value }))]
+}
+
+function hoursForGender(gender: string) {
+  if (gender === 'Female') return '8 hours'
+  if (gender === 'Male') return '9 hours'
+  return '9 hours'
+}
+
+function functionsForDepartments(deptNames: string[]) {
+  const next = new Set<string>()
+  deptNames.forEach((name) => {
+    const record = departmentRecords.find((item) => item.name === name)
+    record?.functions.forEach((fn) => next.add(fn))
+    if (name === 'UI/UX') {
+      ;['Design', 'UI Design', 'UX Research', 'Visual Design', 'Design System'].forEach((fn) =>
+        next.add(fn),
+      )
+    }
+  })
+  return Array.from(next).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+}
+
+function personLabel(name: string) {
+  const match = employees.find((item) => item.name === name)
+  return match ? `${match.name} (${match.id})` : name
+}
+
+function reportingOptions(names: string[]) {
+  const seen = new Set<string>()
+  const list: Array<{ value: string; label: string }> = []
+
+  function add(name: string) {
+    if (!name || seen.has(name)) return
+    seen.add(name)
+    list.push({ value: name, label: personLabel(name) })
+  }
+
+  employees.forEach((item) => add(item.name))
+  names.forEach(add)
+  return list.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
+}
+
+function requiredLabel(label: string) {
+  return (
+    <>
+      {label} <span className="cp-req">*</span>
+    </>
+  )
 }
 
 export function EditEmployeePage() {
@@ -52,28 +128,37 @@ export function EditEmployeePage() {
   const [gender, setGender] = useState('')
   const [email, setEmail] = useState(employee?.email ?? '')
   const [designation, setDesignation] = useState(employee?.role ?? '')
-  const [hours, setHours] = useState(employee ? '8 hours' : '')
-  const [selectedDepartments, setSelectedDepartments] = useState<EuiComboBoxOptionOption[]>(
-    employee ? [{ label: employee.department }] : [],
+  const [hours, setHours] = useState(employee ? '9 hours' : '')
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>(
+    employee ? [employee.department] : [],
   )
-  const [selectedFunctions, setSelectedFunctions] = useState<EuiComboBoxOptionOption[]>([])
-  const [teamLeads, setTeamLeads] = useState<EuiComboBoxOptionOption[]>([])
-  const [managers, setManagers] = useState<EuiComboBoxOptionOption[]>([])
+  const [selectedFunctions, setSelectedFunctions] = useState<string[]>(
+    employee ? [jobFunction(employee)] : [],
+  )
+  const [teamLeads, setTeamLeads] = useState<string[]>(
+    employee?.teamLead ? [employee.teamLead] : [],
+  )
+  const [managers, setManagers] = useState<string[]>(employee?.manager ? [employee.manager] : [])
+  const [projects, setProjects] = useState<string[]>([])
   const [location, setLocation] = useState(employee?.location ?? '')
   const [workMode, setWorkMode] = useState(employee?.workMode ?? '')
   const [accountStatus, setAccountStatus] = useState('Active')
-  const [devices, setDevices] = useState<string[]>(
-    employee ? [`CIPL-ATC${employee.id.replace(/\D/g, '').padStart(5, '0')}`] : [],
-  )
+  const [devices, setDevices] = useState<string[]>([])
+  const [hostname, setHostname] = useState('')
+  const [passwordReset, setPasswordReset] = useState(false)
 
-  const departmentNames = selectedDepartments.map((item) => item.label)
-  const functionChoices = useMemo(() => {
-    const next = new Set<string>()
-    departmentNames.forEach((department) => {
-      FUNCTION_MAP[department]?.forEach((item) => next.add(item))
-    })
-    return Array.from(next)
-  }, [departmentNames])
+  const teamLeadOptions = useMemo(() => reportingOptions(LEADS), [])
+  const managerOptions = useMemo(() => reportingOptions(MANAGERS), [])
+  const functionChoices = useMemo(
+    () => (isNew ? functionsForDepartments(selectedDepartments) : FUNCTION_OPTIONS),
+    [isNew, selectedDepartments],
+  )
+  const username =
+    name.trim().split(/\s+/)[0] || email.split('@')[0] || employeeCode.trim() || '—'
+
+  const passwordCopy = passwordReset
+    ? 'A new password will be set when you save. The employee must use it to sign in.'
+    : 'CUSTOM — has been changed/reset, not the Employee ID anymore. Use Reset Password below to set a new one.'
 
   if (!isNew && !employee) {
     return <Navigate to="/user-management" replace />
@@ -83,11 +168,32 @@ export function EditEmployeePage() {
     navigate('/user-management')
   }
 
+  function handleGender(next: string) {
+    setGender(next)
+    setHours((current) => {
+      const previousDefault = hoursForGender(gender)
+      if (!current || current === previousDefault) return hoursForGender(next)
+      return current
+    })
+  }
+
+  function addHostname() {
+    const next = hostname.trim()
+    if (!next) return
+    const exists = devices.some((item) => item.toLowerCase() === next.toLowerCase())
+    if (exists) {
+      setHostname('')
+      return
+    }
+    setDevices((current) => [...current, next])
+    setHostname('')
+  }
+
   return (
     <section className="cp-edit-page">
       <div className="cp-incident-head">
         <div className="cp-page-lead">
-          <h1 className="cp-activity-title">{isNew ? 'Add Employee' : 'Edit Employee'}</h1>
+          <h1 className="cp-activity-title">{isNew ? 'Create Employee' : 'Edit Employee'}</h1>
           <div className="cp-card-sub">
             Employee Master — one record for every person, regardless of designation.
           </div>
@@ -103,19 +209,19 @@ export function EditEmployeePage() {
       </div>
 
       <EuiForm component="form" onSubmit={(event) => event.preventDefault()}>
-        <FormCard index={1} title="Personal Information">
+        <FormCard title="Employee details">
           <div className="cp-form-stack">
             <div className="cp-form-grid cp-form-grid--3">
-              <FormField label="Employee ID *" fullWidth>
+              <FormField label={requiredLabel('Employee ID')} fullWidth>
                 <EuiFieldText
                   compressed
                   fullWidth
                   value={employeeCode}
-                  placeholder="e.g. EMP-001"
+                  placeholder={isNew ? 'e.g. EMP-001' : 'e.g. CIPL073'}
                   onChange={(event) => setEmployeeCode(event.target.value)}
                 />
               </FormField>
-              <FormField label="Employee Name *" fullWidth>
+              <FormField label={requiredLabel('Employee Name')} fullWidth>
                 <EuiFieldText
                   compressed
                   fullWidth
@@ -124,37 +230,41 @@ export function EditEmployeePage() {
                   onChange={(event) => setName(event.target.value)}
                 />
               </FormField>
-              <FormField label="Gender *" fullWidth>
+              <FormField label={requiredLabel('Gender')} fullWidth>
                 <EuiSelect
                   compressed
                   fullWidth
                   options={selectOptions(GENDERS)}
                   value={gender}
-                  onChange={(event) => setGender(event.target.value)}
+                  onChange={(event) => handleGender(event.target.value)}
                 />
               </FormField>
             </div>
             <FormField
               label="Email"
-              helpText="email@org.com (defaults from Employee ID if blank)"
+              helpText={isNew ? undefined : 'Used for agent install mail and portal login.'}
             >
               <EuiFieldText
                 compressed
                 fullWidth
                 value={email}
-                placeholder="email@org.com (defaults from Employee ID if blank)"
+                placeholder={
+                  isNew
+                    ? 'email@org.com (defaults from Employee ID if blank)'
+                    : 'email@org.com'
+                }
                 onChange={(event) => setEmail(event.target.value)}
               />
             </FormField>
           </div>
         </FormCard>
 
-        <FormCard index={2} title="Employment Information">
+        <FormCard title="Designation & Expected Working Hours">
           <div className="cp-form-grid">
             <FormField
-              label="Designation *"
+              label={requiredLabel('Designation')}
               fullWidth
-              helpText="Maps the person into role-based views and reporting."
+              helpText="Determines this person's portal login role automatically (Management → Super Admin access, Manager → Manager access, Team Lead → Team Lead access, everything else → standard employee access)."
             >
               <EuiSelect
                 compressed
@@ -165,9 +275,9 @@ export function EditEmployeePage() {
               />
             </FormField>
             <FormField
-              label="Expected Working Hours *"
+              label={requiredLabel('Expected Working Hours')}
               fullWidth
-              helpText="Defaults can follow gender-based org policy; override per employee."
+              helpText="Defaults from Gender (Male: 9, Female: 8) — change freely if this person's actual hours differ."
             >
               <EuiSelect
                 compressed
@@ -180,82 +290,70 @@ export function EditEmployeePage() {
           </div>
         </FormCard>
 
-        <FormCard index={3} title="Department & Function">
+        <FormCard title="Department & Function">
           <div className="cp-form-grid">
-            <FormField label="Department(s) *" fullWidth>
-              <EuiComboBox
-                compressed
-                fullWidth
-                placeholder="Search department..."
-                options={options(departments.map((item) => item.name))}
-                selectedOptions={selectedDepartments}
+            <FormField label={requiredLabel('Department(s)')} fullWidth>
+              <CheckboxPicker
+                id="emp-dept"
+                items={DEPARTMENT_OPTIONS.map((value) => ({ value, label: value }))}
+                selected={selectedDepartments}
                 onChange={(next) => {
                   setSelectedDepartments(next)
-                  setSelectedFunctions((current) =>
-                    current.filter((item) =>
-                      next.some((department) =>
-                        FUNCTION_MAP[department.label]?.includes(item.label),
-                      ),
-                    ),
-                  )
+                  if (!isNew) return
+                  const allowed = new Set(functionsForDepartments(next))
+                  setSelectedFunctions((current) => current.filter((fn) => allowed.has(fn)))
                 }}
+                searchPlaceholder="Search department..."
+                emptyText="No departments match your search."
               />
             </FormField>
-            <FormField
-              label="Function(s)"
-              fullWidth
-              helpText={
-                selectedDepartments.length === 0 ? 'Select a Department first.' : undefined
-              }
-            >
-              <EuiComboBox
-                compressed
-                fullWidth
-                isDisabled={selectedDepartments.length === 0}
-                placeholder={
-                  selectedDepartments.length === 0
-                    ? 'Select a Department first.'
-                    : 'Search function...'
-                }
-                options={options(functionChoices)}
-                selectedOptions={selectedFunctions}
+            <FormField label={requiredLabel('Function(s)')} fullWidth>
+              <CheckboxPicker
+                id="emp-fn"
+                items={functionChoices.map((value) => ({ value, label: value }))}
+                selected={selectedFunctions}
                 onChange={setSelectedFunctions}
-              />
-            </FormField>
-          </div>
-        </FormCard>
-
-        <FormCard index={4} title="Reporting Line">
-          <div className="cp-form-grid">
-            <FormField label="Team Lead(s)" fullWidth>
-              <EuiComboBox
-                compressed
-                fullWidth
-                placeholder={LEADS.length === 0 ? 'No Team Leads found.' : 'Search team lead...'}
-                options={options(LEADS)}
-                selectedOptions={teamLeads}
-                onChange={setTeamLeads}
-                noSuggestions={LEADS.length === 0}
-              />
-            </FormField>
-            <FormField label="Manager(s)" fullWidth>
-              <EuiComboBox
-                compressed
-                fullWidth
-                placeholder={
-                  MANAGERS.length === 0 ? 'No Managers found.' : 'Search manager...'
+                searchPlaceholder="Search function..."
+                emptyText={
+                  isNew && selectedDepartments.length === 0
+                    ? 'Select a Department first.'
+                    : 'No functions match your search.'
                 }
-                options={options(MANAGERS)}
-                selectedOptions={managers}
-                onChange={setManagers}
+                disabled={isNew && selectedDepartments.length === 0}
+                disabledText="Select a Department first."
               />
             </FormField>
           </div>
         </FormCard>
 
-        <FormCard index={5} title="Location & Work Mode">
+        <FormCard title="Team Lead & Manager">
           <div className="cp-form-grid">
-            <FormField label="Location *" fullWidth>
+            <FormField label={isNew ? 'Team Lead(s)' : 'Team Lead(s) — Management'} fullWidth>
+              <CheckboxPicker
+                id="emp-tl"
+                items={teamLeadOptions}
+                selected={teamLeads}
+                onChange={setTeamLeads}
+                searchPlaceholder="Search team lead..."
+                emptyText="No team leads match your search."
+              />
+            </FormField>
+            <FormField label={isNew ? 'Manager(s)' : 'Manager(s) — Management'} fullWidth>
+              <CheckboxPicker
+                id="emp-mgr"
+                items={managerOptions}
+                selected={managers}
+                onChange={setManagers}
+                searchPlaceholder="Search manager..."
+                emptyText="No managers match your search."
+              />
+            </FormField>
+          </div>
+        </FormCard>
+
+        <FormCard title="Location & Work Mode">
+          <div className="cp-form-grid">
+            <FormField label={requiredLabel('Location')} fullWidth>
               <EuiSelect
                 compressed
                 fullWidth
@@ -264,11 +362,11 @@ export function EditEmployeePage() {
                 onChange={(event) => setLocation(event.target.value)}
               />
             </FormField>
-            <FormField label="Work Mode *" fullWidth>
+            <FormField label={requiredLabel('Work Mode')} fullWidth>
               <EuiSelect
                 compressed
                 fullWidth
-                options={selectOptions(WORK_MODES)}
+                options={WORK_MODE_OPTIONS}
                 value={workMode}
                 onChange={(event) => setWorkMode(event.target.value)}
               />
@@ -276,17 +374,33 @@ export function EditEmployeePage() {
           </div>
         </FormCard>
 
-        <FormCard index={6} title="Device Management">
-          {employeeCode.trim() === '' ? (
-            <div className="cp-device-empty">
-              Enter an Employee ID above to see or add devices.
-            </div>
-          ) : (
-            <div className="cp-device-list">
-              {devices.length === 0 ? (
-                <div className="cp-card-sub">No devices linked yet.</div>
-              ) : (
-                devices.map((device) => (
+        <FormCard title={isNew ? 'Device Management' : 'Allocation / Project'}>
+          <div className="cp-form-stack">
+            {!isNew ? (
+              <FormField label="Project(s)" fullWidth>
+                <CheckboxPicker
+                  id="emp-proj"
+                  items={PROJECTS.map((value) => ({ value, label: value }))}
+                  selected={projects}
+                  onChange={setProjects}
+                  searchPlaceholder="Search project..."
+                  emptyText="No projects match your search."
+                />
+              </FormField>
+            ) : null}
+
+            {isNew && employeeCode.trim() === '' ? (
+              <div className="cp-device-empty">
+                Enter an Employee ID above to see or add devices.
+              </div>
+            ) : devices.length === 0 ? (
+              <div className="cp-device-empty">
+                No devices registered yet for this Employee ID. Add a hostname below or it will
+                register itself automatically the first time the agent runs.
+              </div>
+            ) : (
+              <div className="cp-device-list">
+                {devices.map((device) => (
                   <div key={device} className="cp-device-row">
                     <span className="cp-mono">{device}</span>
                     <EuiButtonEmpty
@@ -299,35 +413,95 @@ export function EditEmployeePage() {
                       Remove
                     </EuiButtonEmpty>
                   </div>
-                ))
-              )}
-              <EuiButtonEmpty
-                size="s"
-                iconType="plus"
-                onClick={() =>
-                  setDevices((current) => [
-                    ...current,
-                    `CIPL-ATC${String(10000 + current.length).slice(-5)}`,
-                  ])
-                }
-              >
-                Add device
-              </EuiButtonEmpty>
+                ))}
+              </div>
+            )}
+
+            {(!isNew || employeeCode.trim() !== '') && (
+              <>
+                <FormField label="Add a hostname" fullWidth>
+                  <div className="cp-func-add">
+                    <EuiFieldText
+                      compressed
+                      fullWidth
+                      value={hostname}
+                      placeholder="e.g. DESKTOP-AB12CD3"
+                      onChange={(event) => setHostname(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault()
+                          addHostname()
+                        }
+                      }}
+                    />
+                    <EuiButton
+                      size="s"
+                      fill
+                      color="success"
+                      iconType="plus"
+                      onClick={addHostname}
+                      isDisabled={!hostname.trim()}
+                    >
+                      Add
+                    </EuiButton>
+                  </div>
+                </FormField>
+                <p className="cp-dept-form__note">
+                  Hostnames must be unique to one employee. Reassigning a device here unlinks it
+                  from anyone else.
+                </p>
+              </>
+            )}
+          </div>
+        </FormCard>
+
+        {isNew ? (
+          <FormCard title="Login Credentials">
+            <p className="cp-login-copy">
+              A portal login will be created automatically when this employee is saved — Username
+              and Password will both be set to the Employee ID.
+            </p>
+            <p className="cp-login-copy">
+              An administrator reset never retrieves or displays the employee's existing password —
+              only a brand new one is set.
+            </p>
+          </FormCard>
+        ) : (
+          <FormCard title="Login Information">
+            <div className="cp-login-rows">
+              <div className="cp-login-key">Username</div>
+              <div className="cp-login-val">{username}</div>
+              <div className="cp-login-key">Password</div>
+              <div className="cp-login-val">
+                <div className="cp-login-val__row">
+                  <span>{passwordCopy}</span>
+                  {accountStatus === 'Active' ? (
+                    <span className="cp-dept-status">Active</span>
+                  ) : (
+                    <span className="cp-dept-status cp-dept-status--inactive">Inactive</span>
+                  )}
+                </div>
+                <EuiButtonEmpty
+                  className="cp-login-reset"
+                  size="s"
+                  flush="left"
+                  onClick={() => setPasswordReset(true)}
+                >
+                  Reset Password
+                </EuiButtonEmpty>
+              </div>
             </div>
-          )}
-        </FormCard>
+            <p className="cp-dept-form__note">
+              Administrators cannot retrieve passwords — only set a new one.
+            </p>
+          </FormCard>
+        )}
 
-        <FormCard index={7} title="Login & Security">
-          <EuiText size="s" color="subdued">
-            <p className="cp-flush">Only a Manager or Super Admin can manage portal login access.</p>
-          </EuiText>
-        </FormCard>
-
-        <FormCard index={8} title="Account Status">
+        <FormCard title="Status">
           <FormField
             className="cp-field--narrow"
-            label="Status *"
-            helpText="Deactivating also revokes portal login access and stops the agent from reporting. Historical productivity data is preserved."
+            label={requiredLabel('Status')}
+            helpText="Deactivating also revokes portal login access and stops the agent from reporting for this employee. Historical productivity data is never deleted by deactivation."
           >
             <EuiSelect
               compressed
@@ -343,28 +517,106 @@ export function EditEmployeePage() {
       <div className="cp-form-foot">
         <EuiButton onClick={goBack}>Cancel</EuiButton>
         <EuiButton fill color="success" onClick={goBack}>
-          Save Changes
+          {isNew ? 'Create Employee' : 'Save Changes'}
         </EuiButton>
       </div>
     </section>
   )
 }
 
-function FormCard({
-  index,
-  title,
-  children,
-}: {
-  index: number
-  title: string
-  children: ReactNode
-}) {
+function FormCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="cp-card cp-form-card">
-      <h2 className="cp-form-card__title">
-        <span>{index}.</span> {title}
-      </h2>
+      <h2 className="cp-form-card__title">{title}</h2>
       {children}
     </section>
+  )
+}
+
+function CheckboxPicker({
+  id,
+  items,
+  selected,
+  onChange,
+  searchPlaceholder,
+  emptyText,
+  disabled = false,
+  disabledText,
+}: {
+  id: string
+  items: Array<{ value: string; label: string }>
+  selected: string[]
+  onChange: (next: string[]) => void
+  searchPlaceholder: string
+  emptyText: string
+  disabled?: boolean
+  disabledText?: string
+}) {
+  const [query, setQuery] = useState('')
+  const normalized = query.trim().toLowerCase()
+  const filtered = items.filter((item) =>
+    `${item.label} ${item.value}`.toLowerCase().includes(normalized),
+  )
+  const selectedItems = selected.map(
+    (value) => items.find((item) => item.value === value) ?? { value, label: value },
+  )
+  const message = disabled ? (disabledText ?? emptyText) : filtered.length === 0 ? emptyText : null
+
+  function toggle(value: string) {
+    if (disabled) return
+    onChange(selected.includes(value) ? selected.filter((item) => item !== value) : [...selected, value])
+  }
+
+  return (
+    <div className="cp-picker">
+      {disabled ? null : (
+        <EuiFieldSearch
+          compressed
+          fullWidth
+          incremental
+          isClearable
+          placeholder={searchPlaceholder}
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          aria-label={searchPlaceholder}
+        />
+      )}
+      <div
+        className={['cp-picker__list', message ? 'cp-picker__list--message' : '']
+          .filter(Boolean)
+          .join(' ')}
+        role="group"
+      >
+        {message ? (
+          <div className="cp-func-check-empty">{message}</div>
+        ) : (
+          filtered.map((item) => (
+            <EuiCheckbox
+              key={item.value}
+              id={`${id}-${slug(item.value)}`}
+              label={item.label}
+              checked={selected.includes(item.value)}
+              onChange={() => toggle(item.value)}
+            />
+          ))
+        )}
+      </div>
+      {!disabled && selectedItems.length > 0 ? (
+        <div className="cp-picker__chips">
+          {selectedItems.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              className="cp-func-tag cp-picker-chip"
+              onClick={() => toggle(item.value)}
+              aria-label={`Remove ${item.label}`}
+            >
+              {item.label}
+              <EuiIcon type="cross" size="s" />
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   )
 }
