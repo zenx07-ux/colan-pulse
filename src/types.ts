@@ -19,6 +19,22 @@ export interface DepartmentRecord {
   status: DepartmentAccountStatus
 }
 
+export type CategoryKind = 'application' | 'website' | 'youtube'
+export type CategoryClassification = 'Productive' | 'Unproductive' | 'Neutral'
+export type CategoryRuleStatus = 'Active' | 'Inactive'
+
+export interface CategoryRule {
+  id: string
+  kind: CategoryKind
+  name: string
+  classification: CategoryClassification
+  aiTool: boolean
+  department: string
+  functionName: string
+  status: CategoryRuleStatus
+  priority: number
+}
+
 export interface Employee {
   id: string
   name: string
@@ -79,6 +95,15 @@ export interface CalendarEvent {
   status: EventStatus
 }
 
+export type EventCategoryStatus = 'Active' | 'Inactive'
+
+export interface EventCategory {
+  id: string
+  name: string
+  classification: string
+  status: EventCategoryStatus
+}
+
 export interface AgentVersionShare {
   version: string
   count: number
@@ -92,3 +117,38 @@ export interface AgentErrorGroup {
   detail: string
   lastHost: string
 }
+
+export type SystemLogKind = 'api' | 'agent'
+
+export interface SystemLog {
+  id: string
+  kind: SystemLogKind
+  exception: string
+  category: string
+  employeeName: string | null
+  employeeId: string | null
+  message: string
+  detail: string
+  timestamp: string
+}
+
+export interface AiAssistantTool {
+  id: string
+  name: string
+  processNames: string[]
+  executableNames: string[]
+  enabled: boolean
+  notes: string
+}
+
+export interface AiDiagnosticCapture {
+  id: string
+  employeeId: string
+  employeeName: string
+  capturedAt: string
+  processName: string
+  executableName: string
+  matchedTool: string | null
+}
+
+export type AiTestConfidence = 'High' | 'Medium' | 'None'

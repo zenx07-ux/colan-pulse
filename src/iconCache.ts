@@ -21,6 +21,7 @@ import { icon as documentEdit } from '@elastic/eui/es/components/icon/assets/pen
 import { icon as dot } from '@elastic/eui/es/components/icon/assets/dot'
 import { icon as download } from '@elastic/eui/es/components/icon/assets/download'
 import { icon as editorChecklist } from '@elastic/eui/es/components/icon/assets/editor_checklist'
+import { icon as email } from '@elastic/eui/es/components/icon/assets/email'
 import { icon as empty } from '@elastic/eui/es/components/icon/assets/empty'
 import { icon as exit } from '@elastic/eui/es/components/icon/assets/exit'
 import { icon as eye } from '@elastic/eui/es/components/icon/assets/eye'
@@ -94,6 +95,7 @@ appendIconComponentCache({
   dot,
   download,
   editorChecklist,
+  email,
   empty,
   exit,
   eye,

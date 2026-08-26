@@ -244,6 +244,12 @@ const employeeRecords: Array<Omit<Employee, 'manager' | 'teamLead'>> = [
   },
 ]
 
+export function jobFunction(employee: Pick<Employee, 'department'>) {
+  if (employee.department === 'UI/UX') return 'Design'
+  if (employee.department === 'Quality Assurance') return 'QA'
+  return employee.department
+}
+
 export const employees: Employee[] = employeeRecords.map((employee) => {
   const teamLead = TEAM_LEAD_BY_DEPT[employee.department] ?? ''
   return {

@@ -1,6 +1,5 @@
 import {
   EuiBadge,
-  EuiEmptyPrompt,
   EuiFlexGrid,
   EuiFlexGroup,
   EuiFlexItem,
@@ -138,34 +137,6 @@ export function ProductivityPage() {
           defaultSort={{ id: 'score', direction: 'desc' }}
         />
       </section>
-    </>
-  )
-}
-
-export function CategoriesPage() {
-  const apps = employees
-    .map((employee) => employee.currentApp)
-    .filter((value): value is string => Boolean(value))
-  const unique = Array.from(new Set(apps))
-
-  return (
-    <>
-      <PageHeading
-        title="Categories"
-        description="Application categories observed from agent telemetry."
-      />
-      <EuiSpacer />
-      {unique.length === 0 ? (
-        <EuiEmptyPrompt iconType="tableOfContents" title={<h3>No active apps</h3>} />
-      ) : (
-        <EuiFlexGroup wrap>
-          {unique.map((app) => (
-            <EuiFlexItem key={app} grow={false}>
-              <EuiBadge color="primary">{app}</EuiBadge>
-            </EuiFlexItem>
-          ))}
-        </EuiFlexGroup>
-      )}
     </>
   )
 }

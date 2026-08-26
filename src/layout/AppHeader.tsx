@@ -17,10 +17,13 @@ const PAGE_TITLES: Record<string, string> = {
   '/job-roles': 'Job Roles',
   '/productivity': 'Employee Productivity',
   '/categories': 'Categories',
+  '/ai-assistant-detection': 'AI Assistant Detection',
   '/events': 'Events',
   '/reports': 'Reports',
   '/alerts': 'Alerts',
   '/agent-health': 'Agent Health',
+  '/system-logs': 'System Logs',
+  '/settings': 'Settings',
 }
 
 export function AppHeader() {

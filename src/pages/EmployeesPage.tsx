@@ -11,17 +11,11 @@ import {
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { EmployeeFlyout } from '../components/EmployeeFlyout'
 import { FilterPopover } from '../components/FilterPopover'
-import { employees } from '../data/employees'
+import { employees, jobFunction } from '../data/employees'
 import { formatHms, seededSeconds } from '../utils/format'
 import type { Employee } from '../types'
 
 type ConnectionFilter = 'all' | 'online' | 'offline'
-
-function jobFunction(employee: Employee) {
-  if (employee.department === 'UI/UX') return 'Design'
-  if (employee.department === 'Quality Assurance') return 'QA'
-  return employee.department
-}
 
 function isOnline(employee: Employee) {
   return employee.status !== 'offline'

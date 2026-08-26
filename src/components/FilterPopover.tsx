@@ -19,6 +19,7 @@ export function FilterPopover({
   compressed = true,
   fullWidth = true,
   hideLabel = false,
+  capsLabel = false,
 }: {
   label: string
   placeholder: string
@@ -28,6 +29,7 @@ export function FilterPopover({
   compressed?: boolean
   fullWidth?: boolean
   hideLabel?: boolean
+  capsLabel?: boolean
 }) {
   const reactId = useId()
   const popoverId = `popover-${reactId.replace(/:/g, '')}`
@@ -115,6 +117,15 @@ export function FilterPopover({
 
   if (hideLabel) {
     return <div className="cp-filter">{control}</div>
+  }
+
+  if (capsLabel) {
+    return (
+      <div className="cp-filter">
+        <span className="cp-filter-label">{label}</span>
+        {control}
+      </div>
+    )
   }
 
   return (
