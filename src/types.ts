@@ -10,6 +10,15 @@ export interface DepartmentStat {
   idle: number
 }
 
+export type DepartmentAccountStatus = 'active' | 'inactive'
+
+export interface DepartmentRecord {
+  id: string
+  name: string
+  functions: string[]
+  status: DepartmentAccountStatus
+}
+
 export interface Employee {
   id: string
   name: string

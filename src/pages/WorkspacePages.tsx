@@ -4,59 +4,14 @@ import {
   EuiFlexGrid,
   EuiFlexGroup,
   EuiFlexItem,
-  EuiProgress,
   EuiSpacer,
 } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { PageHeading } from '../components/PageHeading'
 import { PersonCell } from '../components/PersonCell'
-import { departments } from '../data/departments'
 import { employees } from '../data/employees'
 import { formatIdle } from '../utils/format'
 import type { Employee } from '../types'
-
-export function DepartmentsPage() {
-  return (
-    <>
-      <PageHeading
-        title="Departments"
-        description="Headcount and live presence grouped by department."
-      />
-      <EuiSpacer />
-      <EuiFlexGrid columns={2} gutterSize="l">
-        {departments.map((department) => {
-          const members = employees.filter(
-            (employee) => employee.department === department.name,
-          )
-          const active = members.filter((member) => member.status === 'active').length
-          return (
-            <EuiFlexItem key={department.name}>
-              <div className="cp-card cp-kpi">
-                <div className="cp-card-title">{department.name}</div>
-                <div className="cp-card-sub" style={{ margin: '4px 0 12px' }}>
-                  {department.people} employees · {active} active
-                </div>
-                <EuiFlexGroup justifyContent="spaceBetween" alignItems="center">
-                  <EuiFlexItem>
-                    <EuiProgress
-                      value={department.score}
-                      max={100}
-                      size="s"
-                      color={department.score >= 75 ? 'success' : 'warning'}
-                    />
-                  </EuiFlexItem>
-                  <EuiFlexItem grow={false}>
-                    <strong>{department.score}%</strong>
-                  </EuiFlexItem>
-                </EuiFlexGroup>
-              </div>
-            </EuiFlexItem>
-          )
-        })}
-      </EuiFlexGrid>
-    </>
-  )
-}
 
 export function ProjectsPage() {
   const projects = [

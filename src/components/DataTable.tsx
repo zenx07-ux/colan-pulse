@@ -23,16 +23,20 @@ export function DataTable<T>({
   getRowId: (item: T) => string
   onRowClick?: (item: T) => void
   pageSize?: number
-  defaultSort?: { id: string; direction: 'asc' | 'desc' }
+  /** Pass `null` to keep the input order until the user sorts a column. */
+  defaultSort?: { id: string; direction: 'asc' | 'desc' } | null
   empty?: string
 }) {
-  const [sortId, setSortId] = useState(defaultSort?.id ?? columns[0]?.id)
+  const [sortId, setSortId] = useState<string | null>(() => {
+    if (defaultSort === null) return null
+    return defaultSort?.id ?? columns[0]?.id ?? null
+  })
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(defaultSort?.direction ?? 'desc')
   const [page, setPage] = useState(0)
 
   const sorted = useMemo(() => {
     const column = columns.find((item) => item.id === sortId)
-    if (!column?.sortValue) return items
+    if (!sortId || !column?.sortValue) return items
     const list = [...items]
     list.sort((a, b) => {
       const av = column.sortValue!(a)
@@ -46,6 +50,8 @@ export function DataTable<T>({
 
   const pages = Math.max(1, Math.ceil(sorted.length / pageSize))
   const safePage = Math.min(page, pages - 1)
+  const start = sorted.length === 0 ? 0 : safePage * pageSize + 1
+  const end = Math.min(sorted.length, (safePage + 1) * pageSize)
   const pageItems = sorted.slice(safePage * pageSize, safePage * pageSize + pageSize)
 
   useEffect(() => {
@@ -69,6 +75,8 @@ export function DataTable<T>({
       toggleSort(column)
     }
   }
+
+  const pageNumbers = Array.from({ length: pages }, (_, index) => index)
 
   return (
     <>
@@ -140,24 +148,40 @@ export function DataTable<T>({
       </div>
       <div className="cp-pager">
         <span className="cp-pager__label">
-          Page {safePage + 1} of {pages}
+          {sorted.length === 0
+            ? 'Showing 0 of 0'
+            : `Showing ${start} - ${end} of ${sorted.length}`}
         </span>
         <div className="cp-pager__actions">
           <button
             type="button"
-            className="cp-ghost-btn"
+            className="cp-page-btn"
             disabled={safePage <= 0}
+            aria-label="Previous page"
             onClick={() => setPage((current) => Math.max(0, current - 1))}
           >
-            Previous
+            ‹
           </button>
+          {pageNumbers.map((index) => (
+            <button
+              key={index}
+              type="button"
+              className={`cp-page-btn${safePage === index ? ' is-active' : ''}`}
+              aria-label={`Page ${index + 1}`}
+              aria-current={safePage === index ? 'page' : undefined}
+              onClick={() => setPage(index)}
+            >
+              {index + 1}
+            </button>
+          ))}
           <button
             type="button"
-            className="cp-ghost-btn"
+            className="cp-page-btn"
             disabled={safePage >= pages - 1}
+            aria-label="Next page"
             onClick={() => setPage((current) => Math.min(pages - 1, current + 1))}
           >
-            Next
+            ›
           </button>
         </div>
       </div>
