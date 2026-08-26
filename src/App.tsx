@@ -3,6 +3,7 @@ import { AppLayout } from './layout/AppLayout'
 import { AgentHealthPage } from './pages/AgentHealthPage'
 import { AlertsPage } from './pages/AlertsPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { DepartmentsPage } from './pages/DepartmentsPage'
 import { EditEmployeePage } from './pages/EditEmployeePage'
 import { EmployeesPage } from './pages/EmployeesPage'
 import { EventsPage } from './pages/EventsPage'
@@ -10,7 +11,6 @@ import { NeedsAttentionPage } from './pages/NeedsAttentionPage'
 import { UserManagementPage } from './pages/UserManagementPage'
 import {
   CategoriesPage,
-  DepartmentsPage,
   JobRolesPage,
   ProductivityPage,
   ProjectsPage,

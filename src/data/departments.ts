@@ -1,4 +1,4 @@
-import type { DepartmentStat, TimeRange } from '../types'
+import type { DepartmentRecord, DepartmentStat, TimeRange } from '../types'
 
 export const departments: DepartmentStat[] = [
   { name: 'UI/UX', people: 6, score: 71, idle: 352 },
@@ -6,6 +6,99 @@ export const departments: DepartmentStat[] = [
   { name: 'Quality Assurance', people: 11, score: 76, idle: 231 },
   { name: 'DevOps', people: 7, score: 68, idle: 288 },
   { name: 'Support', people: 9, score: 61, idle: 415 },
+]
+
+export const departmentRecords: DepartmentRecord[] = [
+  {
+    id: 'dept-pm',
+    name: 'Project Management',
+    functions: ['PMO', 'Project Manager', 'Scrum Master'],
+    status: 'active',
+  },
+  {
+    id: 'dept-data',
+    name: 'Data & AI',
+    functions: [
+      'Data Analytics',
+      'Data Analytics - Power BI',
+      'Data Engineering',
+      'Machine Learning',
+      'AI Engineering',
+      'Data Science',
+      'MLOps',
+    ],
+    status: 'active',
+  },
+  {
+    id: 'dept-hr',
+    name: 'HR & Recruitment',
+    functions: ['Talent Acquisition', 'HR Operations', 'HRBP', 'Learning & Development'],
+    status: 'active',
+  },
+  {
+    id: 'dept-sw',
+    name: 'Software Development',
+    functions: [
+      '.NET',
+      'Angular',
+      'DevOps',
+      'React',
+      'Node.js',
+      'Java',
+      'Python',
+      'Mobile',
+      'Full Stack',
+    ],
+    status: 'active',
+  },
+  {
+    id: 'dept-ba',
+    name: 'Business Analysis',
+    functions: ['Business Analyst', 'Product Owner', 'Requirements Analyst'],
+    status: 'active',
+  },
+  {
+    id: 'dept-mkt',
+    name: 'Marketing',
+    functions: ['Digital Marketing', 'Content Marketing', 'SEO', 'Brand Marketing'],
+    status: 'active',
+  },
+  {
+    id: 'dept-cloud',
+    name: 'Cloud & Infrastructure',
+    functions: ['Cloud Ops', 'SRE', 'Infrastructure', 'Platform Engineering'],
+    status: 'active',
+  },
+  {
+    id: 'dept-sales',
+    name: 'Sales & Business Development',
+    functions: ['Sales', 'Business Development', 'Account Management'],
+    status: 'active',
+  },
+  {
+    id: 'dept-qa',
+    name: 'Quality Assurance',
+    functions: ['Manual Testing', 'Automation Testing', 'Performance Testing'],
+    status: 'active',
+  },
+  {
+    id: 'dept-admin',
+    name: 'Administration',
+    functions: ['Administration', 'Facilities', 'Procurement'],
+    status: 'active',
+  },
+  {
+    id: 'dept-finance',
+    name: 'Finance & Accounts',
+    functions: ['Accounts Payable', 'Accounts Receivable', 'Payroll', 'Financial Planning'],
+    status: 'active',
+  },
+  {
+    id: 'dept-design',
+    name: 'UI/UX Design',
+    functions: ['UI Design', 'UX Research', 'Visual Design'],
+    status: 'active',
+  },
 ]
 
 export const RANGE_MULTIPLIER: Record<TimeRange, number> = {
@@ -23,3 +116,55 @@ export const RANGE_LABEL: Record<TimeRange, string> = {
 }
 
 export const PRODUCTIVITY_TARGET = 75
+
+/** Master function catalog for Department Master create/edit. */
+export const DEPARTMENT_FUNCTIONS = [
+  '.NET',
+  'Account Management',
+  'Accounts',
+  'Administration',
+  'Angular',
+  'API Testing',
+  'Audit',
+  'Automation Testing',
+  'AWS',
+  'Azure',
+  'Business Analyst',
+  'Business Development',
+  'Cloud',
+  'Data Analytics',
+  'Data Analytics - Power BI',
+  'Data Engineering',
+  'Data Science',
+  'DBA',
+  'Design System',
+  'DevOps',
+  'Digital Marketing',
+  'Facilities',
+  'Finance',
+  'Functional Consultant',
+  'HR',
+  'HR Operations',
+  'HTML/CSS',
+  'Infrastructure',
+  'IT Support',
+  'Java',
+  'Machine Learning / AI',
+  'Manual Testing',
+  'Mobile',
+  'Node.js',
+  'Performance Testing',
+  'PMO',
+  'Procurement',
+  'Product Owner',
+  'Project Manager',
+  'Python',
+  'React',
+  'Sales',
+  'Scrum Master',
+  'SEO',
+  'SRE',
+  'Talent Acquisition',
+  'UI Design',
+  'UX Research',
+].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
