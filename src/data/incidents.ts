@@ -1,138 +1,94 @@
-import type { Incident } from '../types'
+import type { Incident, IncidentSeverity } from '../types'
 
-export const incidents: Incident[] = [
-  {
-    id: 'inc-01',
-    title:
-      'Browser tab open for 471s with zero real keyboard/mouse input. Only programmatic/background JS activity observed.',
-    detectionType: 'PassiveBrowserSession',
-    employee: 'Aravind Kumar',
-    manager: 'Vishnu K',
-    techLead: 'Karthik Raja',
-    device: 'CIPL-ATC00774',
-    severity: 'medium',
-    read: true,
-    occurredAt: '2026-08-22T09:14:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-02',
-    title:
-      'Browser tab open for 388s with zero real keyboard/mouse input. Page remained in foreground without user interaction.',
-    detectionType: 'PassiveBrowserSession',
-    employee: 'Naveen Selvam',
-    manager: 'Vishnu K',
-    techLead: 'Karthik Raja',
-    device: 'CIPL-ATC00781',
-    severity: 'medium',
-    read: true,
-    occurredAt: '2026-08-22T11:02:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-03',
-    title:
-      'Unattended Chrome window for 512s. Heartbeat present but no keyboard or mouse samples in the active session.',
-    detectionType: 'UnattendedSession',
-    employee: 'Rahul Menon',
-    manager: 'Meera Nair',
-    techLead: 'Vikram Prasad',
-    device: 'CIPL-HYD00412',
-    severity: 'medium',
-    read: true,
-    occurredAt: '2026-08-21T14:40:00.000Z',
-    warningCount: 1,
-  },
-  {
-    id: 'inc-04',
-    title:
-      'Figma canvas idle for 19 minutes while the agent still reported the design file as the current screen.',
-    detectionType: 'ZeroInputWindow',
-    employee: 'Sneha Iyer',
-    manager: 'Vishnu K',
-    techLead: 'Karthik Raja',
-    device: 'CIPL-BLR00308',
-    severity: 'medium',
-    read: true,
-    occurredAt: '2026-08-21T08:22:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-05',
-    title: 'Short idle burst of 6 minutes on the billing regression suite tab.',
-    detectionType: 'IdleTimeout',
-    employee: 'Anitha Suresh',
-    manager: 'Deepa Krishnan',
-    techLead: 'Joseph Mathew',
-    device: 'CIPL-CHN00221',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-22T06:55:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-06',
-    title: 'Teams window in foreground for 8 minutes with no input after shift handover notes.',
-    detectionType: 'PassiveBrowserSession',
-    employee: 'Deepa Krishnan',
-    manager: 'Vishnu K',
-    techLead: 'Sathish Kannan',
-    device: 'CIPL-BLR00190',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-22T04:18:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-07',
-    title: 'Grafana dashboard parked for 7 minutes during agent heartbeat review.',
-    detectionType: 'IdleTimeout',
-    employee: 'Sathish Kannan',
-    manager: 'Meera Nair',
-    techLead: 'Vikram Prasad',
-    device: 'CIPL-CHN00844',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-21T16:05:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-08',
-    title: 'Playwright report tab idle for 11 minutes with no scroll or click events.',
-    detectionType: 'ZeroInputWindow',
-    employee: 'Joseph Mathew',
-    manager: 'Deepa Krishnan',
-    techLead: 'Anitha Suresh',
-    device: 'CIPL-BLR00611',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-21T12:31:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-09',
-    title: 'Zendesk ticket view held in foreground for 9 minutes without typing.',
-    detectionType: 'PassiveBrowserSession',
-    employee: 'Farhan Ali',
-    manager: 'Deepa Krishnan',
-    techLead: 'Sathish Kannan',
-    device: 'CIPL-CHN00117',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-21T07:48:00.000Z',
-    warningCount: 0,
-  },
-  {
-    id: 'inc-10',
-    title: 'Auth middleware PR review paused for 5 minutes with Cursor still the active app.',
-    detectionType: 'IdleTimeout',
-    employee: 'Vikram Prasad',
-    manager: 'Meera Nair',
-    techLead: 'Sathish Kannan',
-    device: 'CIPL-CHN00902',
-    severity: 'low',
-    read: true,
-    occurredAt: '2026-08-22T13:20:00.000Z',
-    warningCount: 0,
-  },
+const DETECTION_TYPES = [
+  'AppClosed',
+  'RepetitiveKeySpam',
+  'PassiveBrowserSession',
+  'UnattendedSession',
+  'ZeroInputWindow',
+  'IdleTimeout',
+  'AgentOffline',
+  'ClipboardBurst',
 ]
+
+const EMPLOYEES = [
+  'AshokKumar U',
+  'Aravind Kumar',
+  'Naveen Selvam',
+  'Rahul Menon',
+  'Sneha Iyer',
+  'Anitha Suresh',
+  'Deepa Krishnan',
+  'Sathish Kannan',
+  'Joseph Mathew',
+  'Farhan Ali',
+  'Vikram Prasad',
+  'Meera Nair',
+  'Divya Ramesh',
+  'Karthik Raja',
+]
+
+const MANAGERS = ['Vishnu K', 'Meera Nair', 'Deepa Krishnan']
+const TECH_LEADS = ['Karthik Raja', 'Vikram Prasad', 'Joseph Mathew', 'Sathish Kannan', 'Anitha Suresh']
+
+const TITLES = [
+  'Agent closed by {employee}',
+  'Potential automated input detected ({events} events over {seconds}s)',
+  'Browser tab open for {seconds}s with zero real keyboard/mouse input.',
+  'Unattended Chrome window for {seconds}s. Heartbeat present but no input samples.',
+  'Figma canvas idle for {minutes} minutes while the agent still reported the design file.',
+  'Teams window in foreground for {minutes} minutes with no input after handover notes.',
+  'Repetitive key pattern detected — {events} identical keystrokes in {seconds}s.',
+  'Clipboard burst of {events} copies in under {seconds}s during file transfer.',
+  'Agent heartbeat lost on {device}; last seen mid-session.',
+  'Playwright report tab idle for {minutes} minutes with no scroll or click events.',
+]
+
+function seedMod(seed: string, mod: number) {
+  return seed.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) % mod
+}
+
+function buildTitle(index: number, employee: string, device: string) {
+  const template = TITLES[index % TITLES.length]
+  return template
+    .replace('{employee}', employee)
+    .replace('{device}', device)
+    .replace('{events}', String(1200 + seedMod(employee + index, 9000)))
+    .replace('{seconds}', String(60 + seedMod(device + index, 500)))
+    .replace('{minutes}', String(5 + seedMod(employee, 25)))
+}
+
+function severityFor(index: number): IncidentSeverity {
+  if (index < 184) return index % 17 === 0 ? 'critical' : 'high'
+  if (index < 200) return 'medium'
+  return 'low'
+}
+
+function buildIncident(index: number): Incident {
+  const employee = EMPLOYEES[index % EMPLOYEES.length]
+  const manager = MANAGERS[index % MANAGERS.length]
+  const techLead = TECH_LEADS[index % TECH_LEADS.length]
+  const device = `CIPL-A${String(1000000 + seedMod(employee + index, 900000)).padStart(7, '0')}`
+  const minutesAgo = 8 + index * 7
+  const occurredAt = new Date(Date.now() - minutesAgo * 60_000).toISOString()
+  const severity = severityFor(index)
+  const detectionType = DETECTION_TYPES[index % DETECTION_TYPES.length]
+
+  return {
+    id: `inc-${String(index + 1).padStart(3, '0')}`,
+    title: buildTitle(index, employee, device),
+    detectionType,
+    employee,
+    manager,
+    techLead,
+    device,
+    severity,
+    read: index >= 10,
+    occurredAt,
+    warningCount: seedMod(device, 30),
+    usagePct: 3 + seedMod(employee + detectionType, 28),
+  }
+}
+
+/** Seed list sized to match Incident Center totals (~200). */
+export const incidents: Incident[] = Array.from({ length: 200 }, (_, index) => buildIncident(index))

@@ -1,8 +1,30 @@
-import { agentErrors, agentHealthStats, agentVersions } from '../data/agentHealth'
+import { useState } from 'react'
+import { EuiIcon } from '@elastic/eui'
+import {
+  agentErrors,
+  agentHealthStats,
+  agentLatestErrors,
+  agentVersions,
+} from '../data/agentHealth'
+import type { AgentErrorSource, AgentLatestError } from '../types'
 
 const VERSION_MAX = Math.max(...agentVersions.map((item) => item.count))
 
+function formatErrorTime(iso: string) {
+  const date = new Date(iso)
+  return date.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+}
+
 export function AgentHealthPage() {
+  const [expanded, setExpanded] = useState<string | null>(null)
+
   return (
     <section className="cp-health-page">
       <div className="cp-incident-head">
@@ -32,7 +54,7 @@ export function AgentHealthPage() {
           <div className="cp-health-versions">
             {agentVersions.map((item) => (
               <div key={item.version} className="cp-health-version">
-                <span className="cp-mono">{item.version}</span>
+                <span className="cp-health-version__label">{item.version}</span>
                 <div className="cp-bar-track">
                   <div
                     className="cp-bar-fill"
@@ -68,6 +90,24 @@ export function AgentHealthPage() {
           </div>
         </section>
       </div>
+
+      <section className="cp-card cp-health-latest">
+        <div className="cp-card-head">
+          <div className="cp-card-title">Latest Errors</div>
+        </div>
+        <div className="cp-health-latest__list">
+          {agentLatestErrors.map((item) => (
+            <LatestErrorRow
+              key={item.id}
+              item={item}
+              open={expanded === item.id}
+              onToggle={() =>
+                setExpanded((current) => (current === item.id ? null : item.id))
+              }
+            />
+          ))}
+        </div>
+      </section>
     </section>
   )
 }
@@ -88,5 +128,57 @@ function Stat({
       </div>
       <div className="cp-incident-kpi__label">{label}</div>
     </div>
+  )
+}
+
+function LatestErrorRow({
+  item,
+  open,
+  onToggle,
+}: {
+  item: AgentLatestError
+  open: boolean
+  onToggle: () => void
+}) {
+  return (
+    <article className={`cp-latest-error${open ? ' is-open' : ''}`}>
+      <button type="button" className="cp-latest-error__toggle" onClick={onToggle}>
+        <div className="cp-latest-error__main">
+          <div className="cp-latest-error__badges">
+            <span className="cp-sev cp-sev--high">ERROR</span>
+            <SourceBadge source={item.source} />
+          </div>
+          <div className="cp-latest-error__body">
+            <div className="cp-latest-error__title">
+              <span className="cp-latest-error__name">{item.name}</span>
+              <span className="cp-latest-error__link">
+                {item.employee} ({item.device})
+              </span>
+            </div>
+            <p className="cp-latest-error__detail">{item.detail}</p>
+            <div className="cp-latest-error__meta">
+              {item.host} v{item.version}
+            </div>
+            {open ? (
+              <div className="cp-latest-error__extra">
+                Source: {item.source.toUpperCase()} · Host {item.host} · Agent {item.version}
+              </div>
+            ) : null}
+          </div>
+          <time className="cp-latest-error__time" dateTime={item.occurredAt}>
+            {formatErrorTime(item.occurredAt)}
+          </time>
+          <EuiIcon type={open ? 'arrowDown' : 'arrowRight'} size="s" />
+        </div>
+      </button>
+    </article>
+  )
+}
+
+function SourceBadge({ source }: { source: AgentErrorSource }) {
+  return (
+    <span className={`cp-source-pill cp-source-pill--${source}`}>
+      {source.toUpperCase()}
+    </span>
   )
 }

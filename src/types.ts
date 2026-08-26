@@ -1,5 +1,5 @@
 export type PresenceStatus = 'active' | 'idle' | 'offline'
-export type WorkMode = 'Office' | 'Hybrid' | 'Remote'
+export type WorkMode = 'WFO' | 'Hybrid' | 'Remote' | 'Unspecified'
 export type ColorMode = 'light' | 'dark'
 export type TimeRange = 'Today' | '7 days' | '30 days' | 'QTD'
 
@@ -75,6 +75,7 @@ export interface Incident {
   read: boolean
   occurredAt: string
   warningCount: number
+  usagePct: number
 }
 
 export type EventStatus = 'scheduled' | 'cancelled' | 'completed'
@@ -152,3 +153,16 @@ export interface AiDiagnosticCapture {
 }
 
 export type AiTestConfidence = 'High' | 'Medium' | 'None'
+export type AgentErrorSource = 'agent' | 'api'
+
+export interface AgentLatestError {
+  id: string
+  name: string
+  source: AgentErrorSource
+  employee: string
+  device: string
+  detail: string
+  host: string
+  version: string
+  occurredAt: string
+}

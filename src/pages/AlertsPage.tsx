@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   EuiButton,
   EuiButtonGroup,
@@ -20,6 +20,8 @@ import type { Incident, IncidentSeverity } from '../types'
 
 type ReadFilter = 'all' | 'unread' | 'read'
 
+const PAGE_SIZE = 10
+
 function unique(values: string[]) {
   return Array.from(new Set(values)).sort()
 }
@@ -34,6 +36,7 @@ export function AlertsPage() {
   const [manager, setManager] = useState('')
   const [techLead, setTechLead] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [page, setPage] = useState(0)
   const [nonce, setNonce] = useState(0)
 
   const incidents = useMemo(() => seedIncidents, [nonce])
@@ -66,7 +69,7 @@ export function AlertsPage() {
         return false
       }
       if (!normalized) return true
-      return [item.title, item.employee, item.detectionType, item.device, item.manager]
+      return [item.title, item.employee, item.detectionType, item.device, item.manager, item.techLead]
         .join(' ')
         .toLowerCase()
         .includes(normalized)
@@ -83,8 +86,19 @@ export function AlertsPage() {
     techLead,
   ])
 
-  const allSelected = filtered.length > 0 && filtered.every((item) => selected.has(item.id))
-  const someSelected = filtered.some((item) => selected.has(item.id))
+  const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const safePage = Math.min(page, pages - 1)
+  const start = filtered.length === 0 ? 0 : safePage * PAGE_SIZE + 1
+  const end = Math.min(filtered.length, (safePage + 1) * PAGE_SIZE)
+  const pageItems = filtered.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE)
+
+  useEffect(() => {
+    setPage(0)
+  }, [query, readFilter, dateFrom, dateTo, detectionType, device, manager, techLead])
+
+  const allSelected =
+    pageItems.length > 0 && pageItems.every((item) => selected.has(item.id))
+  const someSelected = pageItems.some((item) => selected.has(item.id))
 
   function toggleOne(id: string) {
     setSelected((current) => {
@@ -97,11 +111,21 @@ export function AlertsPage() {
 
   function toggleAll() {
     if (allSelected) {
-      setSelected(new Set())
+      setSelected((current) => {
+        const next = new Set(current)
+        pageItems.forEach((item) => next.delete(item.id))
+        return next
+      })
       return
     }
-    setSelected(new Set(filtered.map((item) => item.id)))
+    setSelected((current) => {
+      const next = new Set(current)
+      pageItems.forEach((item) => next.add(item.id))
+      return next
+    })
   }
+
+  const pageNumbers = visiblePages(safePage, pages)
 
   return (
     <section className="cp-incident-page">
@@ -113,6 +137,7 @@ export function AlertsPage() {
             iconType="refresh"
             onClick={() => {
               setSelected(new Set())
+              setPage(0)
               setNonce((value) => value + 1)
             }}
           >
@@ -170,6 +195,7 @@ export function AlertsPage() {
               onChange={(value) => setDateFrom(value)}
               onClear={() => setDateFrom(null)}
               placeholder="Date"
+              dateFormat="DD-MM-YYYY"
             />
           </FormField>
           <FormField className="cp-filter" label="Date to">
@@ -181,6 +207,7 @@ export function AlertsPage() {
               onClear={() => setDateTo(null)}
               placeholder="Date"
               minDate={dateFrom ?? undefined}
+              dateFormat="DD-MM-YYYY"
             />
           </FormField>
           <FilterPopover
@@ -220,7 +247,7 @@ export function AlertsPage() {
           label="Select All"
           checked={allSelected}
           indeterminate={!allSelected && someSelected}
-          disabled={filtered.length === 0}
+          disabled={pageItems.length === 0}
           onChange={toggleAll}
         />
       </div>
@@ -234,19 +261,77 @@ export function AlertsPage() {
           />
         </div>
       ) : (
-        <div className="cp-incident-list">
-          {filtered.map((item) => (
-            <IncidentCard
-              key={item.id}
-              incident={item}
-              checked={selected.has(item.id)}
-              onToggle={() => toggleOne(item.id)}
-            />
-          ))}
-        </div>
+        <>
+          <div className="cp-incident-list">
+            {pageItems.map((item) => (
+              <IncidentCard
+                key={item.id}
+                incident={item}
+                checked={selected.has(item.id)}
+                onToggle={() => toggleOne(item.id)}
+              />
+            ))}
+          </div>
+
+          <div className="cp-pager cp-incident-pager">
+            <span className="cp-pager__label">
+              Showing {start} - {end} of {filtered.length}
+            </span>
+            <div className="cp-pager__actions">
+              <button
+                type="button"
+                className="cp-page-btn"
+                disabled={safePage <= 0}
+                aria-label="Previous page"
+                onClick={() => setPage((current) => Math.max(0, current - 1))}
+              >
+                ‹
+              </button>
+              {pageNumbers.map((item, index) =>
+                item === '…' ? (
+                  <span key={`ellipsis-${index}`} className="cp-page-ellipsis">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={item}
+                    type="button"
+                    className={`cp-page-btn${safePage === item ? ' is-active' : ''}`}
+                    aria-label={`Page ${item + 1}`}
+                    aria-current={safePage === item ? 'page' : undefined}
+                    onClick={() => setPage(item)}
+                  >
+                    {item + 1}
+                  </button>
+                ),
+              )}
+              <button
+                type="button"
+                className="cp-page-btn"
+                disabled={safePage >= pages - 1}
+                aria-label="Next page"
+                onClick={() => setPage((current) => Math.min(pages - 1, current + 1))}
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </section>
   )
+}
+
+function visiblePages(current: number, total: number): Array<number | '…'> {
+  if (total <= 7) return Array.from({ length: total }, (_, index) => index)
+  const pages: Array<number | '…'> = [0]
+  const start = Math.max(1, current - 1)
+  const end = Math.min(total - 2, current + 1)
+  if (start > 1) pages.push('…')
+  for (let page = start; page <= end; page += 1) pages.push(page)
+  if (end < total - 2) pages.push('…')
+  pages.push(total - 1)
+  return pages
 }
 
 function Kpi({
@@ -304,6 +389,10 @@ function IncidentCard({
             {incident.manager}
           </span>
           <span className="cp-incident-meta__item">
+            <EuiIcon type="users" size="s" />
+            {incident.techLead}
+          </span>
+          <span className="cp-incident-meta__item">
             <EuiIcon type="desktop" size="s" />
             {incident.device}
           </span>
@@ -311,11 +400,14 @@ function IncidentCard({
             <EuiIcon type="warning" size="s" color="warning" />
             {incident.warningCount}
           </span>
-          <span className="cp-incident-meta__item">
-            <EuiIcon type="bullseye" size="s" color="primary" />
-            <EuiIcon type="percent" size="s" color="primary" />
+          <span className="cp-incident-meta__item cp-incident-meta__pct">
+            <EuiIcon type="bullseye" size="s" color="danger" />
+            {incident.usagePct}%
           </span>
-          <span className="cp-incident-meta__time">{formatRelative(incident.occurredAt)}</span>
+          <span className="cp-incident-meta__time">
+            <EuiIcon type="clock" size="s" />
+            {formatRelative(incident.occurredAt)}
+          </span>
         </div>
       </div>
     </article>

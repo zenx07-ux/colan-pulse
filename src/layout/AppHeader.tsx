@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { EuiContextMenu, EuiIcon, EuiPopover } from '@elastic/eui'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { EuiIcon, EuiPopover } from '@elastic/eui'
+import { useAuth } from '../auth/AuthContext'
 import { AlertsModal } from '../components/AlertsModal'
+import { ChangePasswordDrawer } from '../components/ChangePasswordDrawer'
 import { PulseLogo } from '../components/PulseLogo'
 import { alerts } from '../data/notifications'
 import { useColorMode } from '../theme/ColorModeContext'
@@ -16,11 +18,12 @@ const PAGE_TITLES: Record<string, string> = {
   '/projects': 'Projects',
   '/job-roles': 'Job Roles',
   '/productivity': 'Employee Productivity',
+  '/ai-adoption': 'AI Adoption',
   '/categories': 'Categories',
   '/ai-assistant-detection': 'AI Assistant Detection',
   '/events': 'Events',
-  '/reports': 'Reports',
-  '/alerts': 'Alerts',
+  '/reports': 'Report Configuration',
+  '/alerts': 'Incident Center',
   '/agent-health': 'Agent Health',
   '/system-logs': 'System Logs',
   '/settings': 'Settings',
@@ -28,10 +31,13 @@ const PAGE_TITLES: Record<string, string> = {
 
 export function AppHeader() {
   const { colorMode, toggleColorMode } = useColorMode()
+  const { user, logout } = useAuth()
   const location = useLocation()
+  const navigate = useNavigate()
   const [clock, setClock] = useState(utcClock)
   const [isAlertsOpen, setIsAlertsOpen] = useState(false)
   const [isUserOpen, setIsUserOpen] = useState(false)
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const pageTitle = location.pathname.startsWith('/user-management')
     ? 'User Management'
     : (PAGE_TITLES[location.pathname] ?? 'Dashboard')
@@ -88,11 +94,12 @@ export function AppHeader() {
             button={
               <button
                 type="button"
-                className="cp-header-btn"
+                className="cp-user-btn"
                 aria-label="Account menu"
                 onClick={() => setIsUserOpen((open) => !open)}
               >
-                <span className="cp-ca">CA</span>
+                <span className="cp-user-name">{user?.name ?? 'SuperAdmin'}</span>
+                <span className="cp-ca">C</span>
               </button>
             }
             isOpen={isUserOpen}
@@ -100,24 +107,39 @@ export function AppHeader() {
             panelPaddingSize="none"
             anchorPosition="downRight"
           >
-            <EuiContextMenu
-              initialPanelId={0}
-              panels={[
-                {
-                  id: 0,
-                  title: 'Colan Admin',
-                  items: [
-                    { name: 'Profile', icon: 'user' },
-                    { name: 'Preferences', icon: 'gear' },
-                    { name: 'Log out', icon: 'exit' },
-                  ],
-                },
-              ]}
-            />
+            <div className="cp-user-menu">
+              <div className="cp-user-menu__id">{user?.id ?? 'CIPL1234'}</div>
+              <div className="cp-user-menu__meta">ID: {user?.id ?? 'CIPL1234'}</div>
+              <div className="cp-user-menu__rule" />
+              <button
+                type="button"
+                className="cp-user-menu__item"
+                onClick={() => {
+                  setIsUserOpen(false)
+                  setIsPasswordOpen(true)
+                }}
+              >
+                Change Password
+              </button>
+              <button
+                type="button"
+                className="cp-user-menu__item cp-user-menu__item--danger"
+                onClick={() => {
+                  setIsUserOpen(false)
+                  logout()
+                  navigate('/login', { replace: true })
+                }}
+              >
+                Logout
+              </button>
+            </div>
           </EuiPopover>
         </div>
       </header>
       {isAlertsOpen ? <AlertsModal onClose={() => setIsAlertsOpen(false)} /> : null}
+      {isPasswordOpen ? (
+        <ChangePasswordDrawer onClose={() => setIsPasswordOpen(false)} />
+      ) : null}
     </>
   )
 }

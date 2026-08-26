@@ -5,12 +5,8 @@ import {
   EuiFlexItem,
   EuiSpacer,
 } from '@elastic/eui'
-import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { PageHeading } from '../components/PageHeading'
-import { PersonCell } from '../components/PersonCell'
 import { employees } from '../data/employees'
-import { formatIdle } from '../utils/format'
-import type { Employee } from '../types'
 
 export function ProjectsPage() {
   const projects = [
@@ -167,6 +163,30 @@ export function ReportsPage() {
           </div>
         </EuiFlexItem>
       </EuiFlexGrid>
+export function CategoriesPage() {
+  const apps = employees
+    .map((employee) => employee.currentApp)
+    .filter((value): value is string => Boolean(value))
+  const unique = Array.from(new Set(apps))
+
+  return (
+    <>
+      <PageHeading
+        title="Categories"
+        description="Application categories observed from agent telemetry."
+      />
+      <EuiSpacer />
+      {unique.length === 0 ? (
+        <EuiEmptyPrompt iconType="tableOfContents" title={<h3>No active apps</h3>} />
+      ) : (
+        <EuiFlexGroup wrap>
+          {unique.map((app) => (
+            <EuiFlexItem key={app} grow={false}>
+              <EuiBadge color="primary">{app}</EuiBadge>
+            </EuiFlexItem>
+          ))}
+        </EuiFlexGroup>
+      )}
     </>
   )
 }

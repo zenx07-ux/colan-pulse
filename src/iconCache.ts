@@ -29,10 +29,12 @@ import { icon as filter } from '@elastic/eui/es/components/icon/assets/filter'
 import { icon as folderOpen } from '@elastic/eui/es/components/icon/assets/folder_open'
 import { icon as gear } from '@elastic/eui/es/components/icon/assets/gear'
 import { icon as globe } from '@elastic/eui/es/components/icon/assets/globe'
+import { icon as heart } from '@elastic/eui/es/components/icon/assets/heart'
 import { icon as help } from '@elastic/eui/es/components/icon/assets/help'
 import { icon as home } from '@elastic/eui/es/components/icon/assets/home'
 import { icon as image } from '@elastic/eui/es/components/icon/assets/image'
 import { icon as inspect } from '@elastic/eui/es/components/icon/assets/inspect'
+import { icon as lock } from '@elastic/eui/es/components/icon/assets/lock'
 import { icon as logoObservability } from '@elastic/eui/es/components/icon/assets/logo_observability'
 import { icon as machineLearningApp } from '@elastic/eui/es/components/icon/assets/app_ml'
 import { icon as managementApp } from '@elastic/eui/es/components/icon/assets/app_management'
@@ -47,6 +49,7 @@ import { icon as offline } from '@elastic/eui/es/components/icon/assets/offline'
 import { icon as online } from '@elastic/eui/es/components/icon/assets/online'
 import { icon as pencil } from '@elastic/eui/es/components/icon/assets/pencil'
 import { icon as percent } from '@elastic/eui/es/components/icon/assets/percent'
+import { icon as play } from '@elastic/eui/es/components/icon/assets/play'
 import { icon as plus } from '@elastic/eui/es/components/icon/assets/plus'
 import { icon as popout } from '@elastic/eui/es/components/icon/assets/popout'
 import { icon as refresh } from '@elastic/eui/es/components/icon/assets/refresh'
@@ -71,6 +74,7 @@ import { icon as visLine } from '@elastic/eui/es/components/icon/assets/vis_line
 import { icon as visMetric } from '@elastic/eui/es/components/icon/assets/vis_metric'
 import { icon as warning } from '@elastic/eui/es/components/icon/assets/warning'
 import { icon as watchesApp } from '@elastic/eui/es/components/icon/assets/app_watches'
+import { icon as wrench } from '@elastic/eui/es/components/icon/assets/wrench'
 
 appendIconComponentCache({
   agentApp,
@@ -103,10 +107,12 @@ appendIconComponentCache({
   folderOpen,
   gear,
   globe,
+  heart,
   help,
   home,
   inspect,
   image,
+  lock,
   logoObservability,
   machineLearningApp,
   managementApp,
@@ -121,6 +127,7 @@ appendIconComponentCache({
   online,
   pencil,
   percent,
+  play,
   plus,
   popout,
   refresh,
@@ -145,4 +152,5 @@ appendIconComponentCache({
   visMetric,
   warning,
   watchesApp,
+  wrench,
 })
