@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './auth/AuthContext'
 import { AppLayout } from './layout/AppLayout'
 import { AgentHealthPage } from './pages/AgentHealthPage'
 import { AlertsPage } from './pages/AlertsPage'
@@ -7,6 +8,7 @@ import { DepartmentsPage } from './pages/DepartmentsPage'
 import { EditEmployeePage } from './pages/EditEmployeePage'
 import { EmployeesPage } from './pages/EmployeesPage'
 import { EventsPage } from './pages/EventsPage'
+import { LoginPage } from './pages/LoginPage'
 import { NeedsAttentionPage } from './pages/NeedsAttentionPage'
 import { UserManagementPage } from './pages/UserManagementPage'
 import {
@@ -20,7 +22,8 @@ import {
 export default function App() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<RequireAuth />}>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/needs-attention" element={<NeedsAttentionPage />} />
         <Route path="/employees" element={<EmployeesPage />} />
@@ -40,3 +43,10 @@ export default function App() {
     </Routes>
   )
 }
+
+function RequireAuth() {
+  const { isAuthenticated } = useAuth()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  return <AppLayout />
+}
+

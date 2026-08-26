@@ -1,5 +1,5 @@
 export type PresenceStatus = 'active' | 'idle' | 'offline'
-export type WorkMode = 'Office' | 'Hybrid' | 'Remote'
+export type WorkMode = 'WFO' | 'Hybrid' | 'Remote' | 'Unspecified'
 export type ColorMode = 'light' | 'dark'
 export type TimeRange = 'Today' | '7 days' | '30 days' | 'QTD'
 

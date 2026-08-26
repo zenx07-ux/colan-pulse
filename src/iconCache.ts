@@ -28,10 +28,12 @@ import { icon as filter } from '@elastic/eui/es/components/icon/assets/filter'
 import { icon as folderOpen } from '@elastic/eui/es/components/icon/assets/folder_open'
 import { icon as gear } from '@elastic/eui/es/components/icon/assets/gear'
 import { icon as globe } from '@elastic/eui/es/components/icon/assets/globe'
+import { icon as heart } from '@elastic/eui/es/components/icon/assets/heart'
 import { icon as help } from '@elastic/eui/es/components/icon/assets/help'
 import { icon as home } from '@elastic/eui/es/components/icon/assets/home'
 import { icon as image } from '@elastic/eui/es/components/icon/assets/image'
 import { icon as inspect } from '@elastic/eui/es/components/icon/assets/inspect'
+import { icon as lock } from '@elastic/eui/es/components/icon/assets/lock'
 import { icon as logoObservability } from '@elastic/eui/es/components/icon/assets/logo_observability'
 import { icon as machineLearningApp } from '@elastic/eui/es/components/icon/assets/app_ml'
 import { icon as managementApp } from '@elastic/eui/es/components/icon/assets/app_management'
@@ -101,10 +103,12 @@ appendIconComponentCache({
   folderOpen,
   gear,
   globe,
+  heart,
   help,
   home,
   inspect,
   image,
+  lock,
   logoObservability,
   machineLearningApp,
   managementApp,
