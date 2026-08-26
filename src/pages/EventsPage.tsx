@@ -13,6 +13,7 @@ import moment from 'moment'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FilterPopover } from '../components/FilterPopover'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { employees } from '../data/employees'
 import {
   EVENT_ASSIGN,
@@ -349,11 +350,12 @@ export function EventsPage() {
   ]
 
   return (
-    <section className="cp-event-page">
-      <div className="cp-incident-head">
-        <h1 className="cp-activity-title">Event Management</h1>
-        <div className="cp-incident-head__action">
-          {tab === 'events' ? (
+    <section className="cp-page cp-event-page">
+      <PageHeading
+        title="Event Management"
+        description="Schedule workforce events and maintain event categories."
+        extra={
+          tab === 'events' ? (
             <EuiButton size="s" fill color="success" iconType="plus" onClick={openCreateEvent}>
               Create Event
             </EuiButton>
@@ -361,9 +363,9 @@ export function EventsPage() {
             <EuiButton size="s" fill color="success" iconType="plus" onClick={openCreateCategory}>
               Add Category
             </EuiButton>
-          )}
-        </div>
-      </div>
+          )
+        }
+      />
 
       <div className="cp-tabs" role="tablist">
         <button
@@ -433,40 +435,42 @@ export function EventsPage() {
                   value={status}
                   onChange={setStatus}
                 />
-                <EuiButton
-                  size="s"
-                  fill
-                  onClick={() =>
-                    setApplied({
-                      from: fromDate,
-                      to: toDate,
-                      category,
-                      classification,
-                      status,
-                    })
-                  }
-                >
-                  Apply
-                </EuiButton>
-                <EuiButton
-                  size="s"
-                  onClick={() => {
-                    setFromDate(null)
-                    setToDate(null)
-                    setCategory('')
-                    setClassification('')
-                    setStatus('')
-                    setApplied({
-                      from: null,
-                      to: null,
-                      category: '',
-                      classification: '',
-                      status: '',
-                    })
-                  }}
-                >
-                  Clear
-                </EuiButton>
+                <div className="cp-filter-actions">
+                  <EuiButton
+                    size="s"
+                    fill
+                    onClick={() =>
+                      setApplied({
+                        from: fromDate,
+                        to: toDate,
+                        category,
+                        classification,
+                        status,
+                      })
+                    }
+                  >
+                    Apply
+                  </EuiButton>
+                  <EuiButton
+                    size="s"
+                    onClick={() => {
+                      setFromDate(null)
+                      setToDate(null)
+                      setCategory('')
+                      setClassification('')
+                      setStatus('')
+                      setApplied({
+                        from: null,
+                        to: null,
+                        category: '',
+                        classification: '',
+                        status: '',
+                      })
+                    }}
+                  >
+                    Clear
+                  </EuiButton>
+                </div>
               </div>
             </EuiForm>
           </section>

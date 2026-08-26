@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { EuiButton, EuiFieldSearch, EuiForm, EuiIcon } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FilterPopover } from '../components/FilterPopover'
+import { PageHeading } from '../components/PageHeading'
 import { employees as seedEmployees, jobFunction } from '../data/employees'
 import type { Employee } from '../types'
 
@@ -172,10 +173,11 @@ export function UserManagementPage() {
   ]
 
   return (
-    <section>
-      <div className="cp-incident-head">
-        <h1 className="cp-activity-title">Employee Master</h1>
-        <div className="cp-incident-head__action">
+    <section className="cp-page">
+      <PageHeading
+        title="Employee Master"
+        description="One record for every person — reporting, location, and work mode."
+        extra={
           <EuiButton
             size="s"
             fill
@@ -185,12 +187,12 @@ export function UserManagementPage() {
           >
             Create Employee
           </EuiButton>
-        </div>
-      </div>
+        }
+      />
 
-      <section className="cp-card cp-master-table">
-        <EuiForm css={{ margin: 0 }}>
-          <div className="cp-activity-toolbar">
+      <EuiForm css={{ margin: 0 }}>
+        <div className="cp-page-filters">
+          <div className="cp-page-toolbar">
             <EuiFieldSearch
               compressed
               fullWidth
@@ -253,7 +255,9 @@ export function UserManagementPage() {
               onChange={setDesignation}
             />
           </div>
-        </EuiForm>
+        </div>
+      </EuiForm>
+      <section className="cp-card cp-master-table">
         <DataTable
           items={filtered}
           columns={columns}

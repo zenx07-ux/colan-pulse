@@ -13,8 +13,6 @@ export const NAV_ITEMS: NavLeaf[] = [
   { id: 'employees', name: 'Employees', path: '/employees', icon: 'users' },
   { id: 'users', name: 'User Management', path: '/user-management', icon: 'managementApp' },
   { id: 'departments', name: 'Departments', path: '/departments', icon: 'nested' },
-  { id: 'projects', name: 'Projects', path: '/projects', icon: 'folderOpen' },
-  { id: 'roles', name: 'Job Roles', path: '/job-roles', icon: 'user' },
   { id: 'productivity', name: 'Employee Productivity', path: '/productivity', icon: 'visGauge' },
   { id: 'ai-adoption', name: 'AI Adoption', path: '/ai-adoption', icon: 'machineLearningApp' },
   { id: 'categories', name: 'Categories', path: '/categories', icon: 'tableOfContents' },
@@ -25,6 +23,7 @@ export const NAV_ITEMS: NavLeaf[] = [
   { id: 'agent', name: 'Agent Health', path: '/agent-health', icon: 'monitoringApp' },
   { id: 'logs', name: 'System Logs', path: '/system-logs', icon: 'document' },
   { id: 'settings', name: 'Settings', path: '/settings', icon: 'gear' },
+  { id: 'audit', name: 'Audit Trail', path: '/audit-trail', icon: 'editorChecklist' },
 ]
 
 export const NAV_WIDTH = 232

@@ -8,6 +8,7 @@ import {
   EuiSwitch,
 } from '@elastic/eui'
 import { useColorMode } from '../theme/ColorModeContext'
+import { PageHeading } from '../components/PageHeading'
 
 export function SettingsPage() {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -47,17 +48,17 @@ export function SettingsPage() {
   }
 
   return (
-    <section className="cp-settings-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">Settings</h1>
-          <div className="cp-card-sub">
-            Organization defaults for the agent, portal, and reporting. Super Admin only.
-          </div>
-        </div>
-      </div>
+    <section className="cp-page cp-settings-page">
+      <PageHeading
+        title="Settings"
+        description="Organization defaults for the agent, portal, and reporting. Super Admin only."
+      />
 
-      <EuiForm component="form" onSubmit={(event) => event.preventDefault()}>
+      <EuiForm
+        className="cp-settings-form"
+        component="form"
+        onSubmit={(event) => event.preventDefault()}
+      >
         <SettingsSection title="Site information">
           <SettingRow
             title="Site title"

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { EuiIcon } from '@elastic/eui'
+import { PageHeading } from '../components/PageHeading'
 import {
   agentErrors,
   agentHealthStats,
@@ -26,15 +27,11 @@ export function AgentHealthPage() {
   const [expanded, setExpanded] = useState<string | null>(null)
 
   return (
-    <section className="cp-health-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">Agent Health</h1>
-          <div className="cp-card-sub">
-            Fleet-wide agent status — refreshes automatically every 30 seconds.
-          </div>
-        </div>
-      </div>
+    <section className="cp-page cp-health-page">
+      <PageHeading
+        title="Agent Health"
+        description="Fleet-wide agent status — refreshes automatically every 30 seconds."
+      />
 
       <div className="cp-health-kpis">
         <Stat value={agentHealthStats.online} label="Online" tone="var(--cp-success-text)" />

@@ -11,6 +11,7 @@ import {
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { FilterPopover } from '../components/FilterPopover'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { categoryRules as seedRules } from '../data/categories'
 import { departmentRecords } from '../data/departments'
 import type {
@@ -243,6 +244,7 @@ export function CategoriesPage() {
       id: 'action',
       label: 'Actions',
       align: 'center',
+      width: '88px',
       sortable: false,
       render: (item) => (
         <span className="cp-action-pair">
@@ -274,30 +276,33 @@ export function CategoriesPage() {
   ]
 
   return (
-    <section>
-      <div className="cp-incident-head">
-        <h1 className="cp-activity-title">App & Website Categories</h1>
-        <div className="cp-incident-head__action cp-head-actions">
-          <EuiButton size="s" onClick={() => fileRef.current?.click()}>
-            Import CSV
-          </EuiButton>
-          <EuiButton size="s" fill color="success" iconType="plus" onClick={openCreate}>
-            Add Rule
-          </EuiButton>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".csv,text/csv"
-            hidden
-            onChange={(event) => {
-              const file = event.target.files?.[0]
-              event.target.value = ''
-              if (!file) return
-              showNotice(`Imported category rules from ${file.name}.`)
-            }}
-          />
-        </div>
-      </div>
+    <section className="cp-page">
+      <PageHeading
+        title="App & Website Categories"
+        description="Classify applications, websites, and YouTube as productive, unproductive, or neutral."
+        extra={
+          <div className="cp-head-actions">
+            <EuiButton size="s" onClick={() => fileRef.current?.click()}>
+              Import CSV
+            </EuiButton>
+            <EuiButton size="s" fill color="success" iconType="plus" onClick={openCreate}>
+              Add Rule
+            </EuiButton>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".csv,text/csv"
+              hidden
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+                event.target.value = ''
+                if (!file) return
+                showNotice(`Imported category rules from ${file.name}.`)
+              }}
+            />
+          </div>
+        }
+      />
 
       <div className="cp-tabs" role="tablist">
         {TABS.map((item) => (

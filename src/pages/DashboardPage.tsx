@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EuiButtonEmpty, EuiForm, EuiIcon, EuiSpacer, type IconType } from '@elastic/eui'
+import { EuiButtonEmpty, EuiForm, EuiIcon, type IconType } from '@elastic/eui'
 import { DataTable, type DataTableColumn } from '../components/DataTable'
 import { EmployeeFlyout } from '../components/EmployeeFlyout'
 import { FilterPopover } from '../components/FilterPopover'
 import { IdleDonut } from '../components/IdleDonut'
+import { PageHeading } from '../components/PageHeading'
 import { PersonCell } from '../components/PersonCell'
 import { StatusBadge } from '../components/StatusBadge'
 import { PRODUCTIVITY_TARGET } from '../data/departments'
@@ -281,15 +282,11 @@ export function DashboardPage() {
   const latestVersion = agentVersions[0]?.version
 
   return (
-    <section className="cp-dash-page">
-      <div className="cp-incident-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title">Dashboard</h1>
-          <div className="cp-card-sub">
-            Today&apos;s workforce snapshot for managers and team leads.
-          </div>
-        </div>
-      </div>
+    <section className="cp-page">
+      <PageHeading
+        title="Dashboard"
+        description="Today's workforce snapshot for managers and team leads."
+      />
 
       <EuiForm css={{ margin: 0 }}>
         <div className="cp-incident-filters">
@@ -337,8 +334,6 @@ export function DashboardPage() {
           />
         </div>
       </EuiForm>
-
-      <EuiSpacer />
 
       <div className="cp-dash-kpis">
         <DashKpi

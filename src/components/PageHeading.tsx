@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { EuiFlexGroup, EuiFlexItem, EuiText, EuiTitle } from '@elastic/eui'
 
 export function PageHeading({
   title,
@@ -11,24 +10,12 @@ export function PageHeading({
   extra?: ReactNode
 }) {
   return (
-    <EuiFlexGroup
-      alignItems="center"
-      justifyContent="spaceBetween"
-      gutterSize="m"
-      responsive
-      wrap
-    >
-      <EuiFlexItem>
-        <EuiTitle>
-          <h1 className="cp-page-title">{title}</h1>
-        </EuiTitle>
-        {description ? (
-          <EuiText size="s" color="subdued">
-            {description}
-          </EuiText>
-        ) : null}
-      </EuiFlexItem>
-      {extra ? <EuiFlexItem grow={false}>{extra}</EuiFlexItem> : null}
-    </EuiFlexGroup>
+    <div className="cp-incident-head">
+      <div className="cp-page-lead">
+        <h1 className="cp-activity-title">{title}</h1>
+        {description ? <div className="cp-card-sub">{description}</div> : null}
+      </div>
+      {extra ? <div className="cp-incident-head__action">{extra}</div> : null}
+    </div>
   )
 }

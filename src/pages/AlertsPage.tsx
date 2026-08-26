@@ -14,6 +14,7 @@ import {
 import type { Moment } from 'moment'
 import { FilterPopover } from '../components/FilterPopover'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import { incidents as seedIncidents } from '../data/incidents'
 import { formatRelative } from '../utils/format'
 import type { Incident, IncidentSeverity } from '../types'
@@ -128,10 +129,11 @@ export function AlertsPage() {
   const pageNumbers = visiblePages(safePage, pages)
 
   return (
-    <section className="cp-incident-page">
-      <div className="cp-incident-head">
-        <h1 className="cp-activity-title">🚨 Incident Center</h1>
-        <div className="cp-incident-head__action">
+    <section className="cp-page cp-incident-page">
+      <PageHeading
+        title="Incident Center"
+        description="Review detections, mark incidents read, and follow up with employees."
+        extra={
           <EuiButton
             size="s"
             iconType="refresh"
@@ -143,8 +145,8 @@ export function AlertsPage() {
           >
             Refresh
           </EuiButton>
-        </div>
-      </div>
+        }
+      />
 
       <div className="cp-incident-kpis">
         <Kpi value={unreadCount} label="Unread" tone="var(--cp-primary-text)" />

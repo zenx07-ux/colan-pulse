@@ -4,6 +4,7 @@ export interface DataTableColumn<T> {
   id: string
   label: string
   align?: 'left' | 'right' | 'center'
+  width?: string
   sortable?: boolean
   sortValue?: (item: T) => string | number
   render: (item: T, index: number) => ReactNode
@@ -98,6 +99,7 @@ export function DataTable<T>({
                     ]
                       .filter(Boolean)
                       .join(' ')}
+                    style={column.width ? { width: column.width } : undefined}
                     onClick={() => toggleSort(column)}
                     onKeyDown={(event) => onHeaderKey(event, column)}
                     tabIndex={sortable ? 0 : undefined}

@@ -12,6 +12,7 @@ import {
 } from '@elastic/eui'
 import { CreateReportDrawer } from '../components/CreateReportDrawer'
 import { FormField } from '../components/FormField'
+import { PageHeading } from '../components/PageHeading'
 import {
   SECURITY_MODES,
   scheduledReports,
@@ -60,38 +61,33 @@ export function ReportsPage() {
   }
 
   return (
-    <section className="cp-report-page">
-      <div className="cp-report-head">
-        <div className="cp-page-lead">
-          <h1 className="cp-activity-title cp-report-title">
-            <EuiIcon type="document" size="m" color="primary" />
-            Report Configuration
-          </h1>
-          <div className="cp-card-sub">
-            Configure automatic daily & weekly productivity reports.
+    <section className="cp-page cp-report-page">
+      <PageHeading
+        title="Report Configuration"
+        description="Configure automatic daily and weekly productivity reports."
+        extra={
+          <div className="cp-report-actions">
+            <EuiButton size="s" color="success" iconType="email">
+              Send Test Email
+            </EuiButton>
+            <EuiButton size="s" color="success" iconType="play" fill>
+              Send Daily Now
+            </EuiButton>
+            <EuiButton size="s" color="primary" iconType="play" fill>
+              Send Weekly Now
+            </EuiButton>
+            <EuiButton
+              size="s"
+              color="primary"
+              iconType="plus"
+              fill
+              onClick={() => setCreateOpen(true)}
+            >
+              New Report
+            </EuiButton>
           </div>
-        </div>
-        <div className="cp-report-actions">
-          <EuiButton size="s" color="success" iconType="email">
-            Send Test Email
-          </EuiButton>
-          <EuiButton size="s" color="success" iconType="play" fill>
-            Send Daily Now
-          </EuiButton>
-          <EuiButton size="s" color="primary" iconType="play" fill>
-            Send Weekly Now
-          </EuiButton>
-          <EuiButton
-            size="s"
-            color="primary"
-            iconType="plus"
-            fill
-            onClick={() => setCreateOpen(true)}
-          >
-            New Report
-          </EuiButton>
-        </div>
-      </div>
+        }
+      />
 
       <section className="cp-card cp-smtp-card">
         <div className="cp-smtp-card__head">
