@@ -17,7 +17,7 @@ import { employees } from '../data/employees'
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say']
 const HOURS = ['4 hours', '6 hours', '8 hours', '8.5 hours', '9 hours']
 const LOCATIONS = ['Chennai', 'Bengaluru', 'Hyderabad', 'Coimbatore']
-const WORK_MODES = ['Office', 'Hybrid', 'Remote']
+const WORK_MODES = ['WFO', 'Hybrid', 'Remote', 'Unspecified']
 const STATUSES = ['Active', 'Inactive']
 const FUNCTION_MAP: Record<string, string[]> = {
   'UI/UX': ['Design', 'Research', 'Visual'],

@@ -10,9 +10,13 @@ export interface DonutSlice {
 export function IdleDonut({
   slices,
   center,
+  centerLabel = 'Total idle',
+  showShare = false,
 }: {
   slices: DonutSlice[]
   center: string
+  centerLabel?: string
+  showShare?: boolean
 }) {
   const { euiTheme } = useEuiTheme()
   const radius = 15.9
@@ -68,7 +72,7 @@ export function IdleDonut({
             }}
           >
             <EuiText size="xs" color="subdued">
-              Total idle
+              {centerLabel}
             </EuiText>
             <EuiText>
               <strong>{center}</strong>
@@ -97,7 +101,10 @@ export function IdleDonut({
                 </EuiFlexItem>
                 <EuiFlexItem grow={false}>
                   <EuiText size="s" color="subdued">
-                    <code>{slice.value}</code>
+                    <code>
+                      {slice.value}
+                      {showShare ? ` (${Math.round(slice.share)}%)` : ''}
+                    </code>
                   </EuiText>
                 </EuiFlexItem>
               </EuiFlexGroup>

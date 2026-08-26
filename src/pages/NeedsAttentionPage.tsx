@@ -19,6 +19,7 @@ export function NeedsAttentionPage() {
 
   const items = useMemo(() => {
     return employees.filter((employee) => {
+      if (employee.status !== 'idle') return false
       if (employee.idleMinutes < IDLE_THRESHOLD_MINUTES) return false
       if (department && employee.department !== department) return false
       return true
@@ -55,7 +56,7 @@ export function NeedsAttentionPage() {
         <div className="cp-page-lead">
           <h1 className="cp-activity-title">Needs Attention</h1>
           <div className="cp-card-sub">
-            Employees behind today's Attention Required counts on the Dashboard Overview.
+            Employees currently idle above the 15-minute threshold.
           </div>
         </div>
         <div className="cp-page-controls">
