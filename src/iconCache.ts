@@ -21,6 +21,7 @@ import { icon as documentEdit } from '@elastic/eui/es/components/icon/assets/pen
 import { icon as dot } from '@elastic/eui/es/components/icon/assets/dot'
 import { icon as download } from '@elastic/eui/es/components/icon/assets/download'
 import { icon as editorChecklist } from '@elastic/eui/es/components/icon/assets/editor_checklist'
+import { icon as email } from '@elastic/eui/es/components/icon/assets/email'
 import { icon as empty } from '@elastic/eui/es/components/icon/assets/empty'
 import { icon as exit } from '@elastic/eui/es/components/icon/assets/exit'
 import { icon as eye } from '@elastic/eui/es/components/icon/assets/eye'
@@ -46,6 +47,7 @@ import { icon as offline } from '@elastic/eui/es/components/icon/assets/offline'
 import { icon as online } from '@elastic/eui/es/components/icon/assets/online'
 import { icon as pencil } from '@elastic/eui/es/components/icon/assets/pencil'
 import { icon as percent } from '@elastic/eui/es/components/icon/assets/percent'
+import { icon as play } from '@elastic/eui/es/components/icon/assets/play'
 import { icon as plus } from '@elastic/eui/es/components/icon/assets/plus'
 import { icon as popout } from '@elastic/eui/es/components/icon/assets/popout'
 import { icon as refresh } from '@elastic/eui/es/components/icon/assets/refresh'
@@ -70,6 +72,7 @@ import { icon as visLine } from '@elastic/eui/es/components/icon/assets/vis_line
 import { icon as visMetric } from '@elastic/eui/es/components/icon/assets/vis_metric'
 import { icon as warning } from '@elastic/eui/es/components/icon/assets/warning'
 import { icon as watchesApp } from '@elastic/eui/es/components/icon/assets/app_watches'
+import { icon as wrench } from '@elastic/eui/es/components/icon/assets/wrench'
 
 appendIconComponentCache({
   agentApp,
@@ -94,6 +97,7 @@ appendIconComponentCache({
   dot,
   download,
   editorChecklist,
+  email,
   empty,
   exit,
   eye,
@@ -119,6 +123,7 @@ appendIconComponentCache({
   online,
   pencil,
   percent,
+  play,
   plus,
   popout,
   refresh,
@@ -143,4 +148,5 @@ appendIconComponentCache({
   visMetric,
   warning,
   watchesApp,
+  wrench,
 })

@@ -16,10 +16,11 @@ const PAGE_TITLES: Record<string, string> = {
   '/projects': 'Projects',
   '/job-roles': 'Job Roles',
   '/productivity': 'Employee Productivity',
+  '/ai-adoption': 'AI Adoption',
   '/categories': 'Categories',
   '/events': 'Events',
-  '/reports': 'Reports',
-  '/alerts': 'Alerts',
+  '/reports': 'Report Configuration',
+  '/alerts': 'Incident Center',
   '/agent-health': 'Agent Health',
 }
 
